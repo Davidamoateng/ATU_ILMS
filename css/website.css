@@ -1,0 +1,113 @@
+html, body{
+    margin: 0px;
+    padding: 0px;
+    font-family: 'PT Sans', sans-serif;
+    font-size: 100%;
+    overflow-x: hidden;
+}
+.header-top-wrapper{
+    background: #1f497d;
+    margin-bottom: 20px;
+    padding: 9px 0;
+    border-bottom: 10px solid #d4af37;
+}
+
+.nav_items ol{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.nav_items ol li{
+    float: right; 
+    display: block;
+    text-align: center;
+    padding: 18px 5px;
+    margin-right: 60px;
+    text-decoration: none;
+}
+
+.nav_items ol li a{
+     color: #FFFFFF;
+     text-decoration: none;
+     font-weight: bold;
+     font-size: 1.2em;
+}
+
+.nav_items ol li a:hover{
+    color: #d4af37;
+    
+}
+
+
+.nav-brand{
+    color: blanchedalmond;
+    float: left; 
+    display: block;
+    text-align: center;
+    padding: 0px 50px;
+    text-decoration: none;
+}
+
+.quick_links{
+    padding-top: 15px;
+    /* width: 238px; */
+    float: right;
+    color: #333;
+    font-size: 10pt;
+    line-height: 20px;
+    display: block;
+}
+
+.quick-links-title{
+    background-color:  #14889A;
+    font-size: 1em;
+    font-weight: bold;
+    padding: 3px 5px;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+.related_links{
+    background-color:  #C5692B;
+    font-size: 1em;
+    font-weight: bold;
+    padding: 3px 5px;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+.related-links-title h3{
+    color: #FFFFFF;
+    display: block;
+    line-height: 0.2em;
+    margin-bottom: 14px;
+    font-weight: bold;
+    font-size: 17px;
+}
+.quick-links-title h3{
+    color: #FFFFFF;
+    display: block;
+    line-height: 0.2em;
+    margin-bottom: 14px;
+    font-weight: bold;
+    font-size: 17px;
+}
+ul.bullet-list li{
+    list-style: none;
+}
+ul.bullet-list li a{
+    /* background: url(../../images/icon-arrow-home-menu.gif) no-repeat scroll 8px 12px white; */
+    color: #003C79;
+    display: block;
+    padding: 8px 10px 8px 30px;
+    text-decoration: none;
+    border-bottom: 1px dotted #999;
+    text-decoration: none !important;
+    font-size: 12px;
+    font-weight: bold;
+    line-height: 20px;
+    
+}
+ul.bullet-list li :hover{
+    color: #d4af37;
+}

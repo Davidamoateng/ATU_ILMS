@@ -1,0 +1,232 @@
+              
+ATU BLUE (#1f497d;)
+ATU YELLOW (#d4af37;)
+=================================================================================================================================
+Cross Side Request Forgery codes
+---------------------------------------------------
+<?php 
+include('functions.php');
+if(!isLoggedIn()){
+	$_SESSION['msg'] = "You must log in first";
+	header('location: login.php');
+}
+?>
+------------------------------------------------------
+
+//Check if User Id Exits
+        //if (isset($_POST['signup_btn'])) {
+
+            //$firstName = $_POST['first_name'];
+            //$lastName = $_POST['last_name'];
+            $userId = esc($_POST['user_id']);
+            //$passwordHash = $_POST['password'];
+
+            $sql_user_id = "SELECT * FROM users WHERE `user_id` = '$userId'";
+            $res_user_id = mysqli_query($db, $sql_user_id) or die(mysqli_error($db));
+
+            if (mysqli_num_rows($res_user_id) > 0) {
+                $name_error = "Sorry... User Id already exists";
+            }
+			//else{
+
+               
+
+            //}
+
+        //}
+
+===========================================================================================================
+                                Regions
+-----------------------------------------------------------------------
+                               Ashanti Region
+                               Ahafo Region
+			       Bono East Region
+			       Brong Ahafo Region
+			       Central Region
+			       Eastern Region
+			       Greater Accra Region
+			       North East Region
+			       Northern Region
+			       Oti Region
+			       Savannah Region
+			       Upper East Region
+																Upper West Region
+																Volta Region 
+																Western North Region
+																Western Region
+=============================================================================================================================
+	                                             FACULTIES
+										-----------------------------
+											Faculty of Applied Arts
+											Faculty of Applied Science
+											Faculty of Built Environment
+											Faculty of Business
+											Faculty of Engineering 
+============================================================================================================================================
+												DEPARTMENTS / PROGRAMS
+									----------------------------------------
+										        Accountancy
+											Building Technology
+											Civil Engineering
+											Computer Science
+											Electrical / Electronics Engineering
+											Fashion Design & Textiles
+											Furniture Design & Production
+											Hotel, Catering & Institutional Management
+											Languages & Liberal Studies
+											Mathematics & Statistics
+											Marketing
+											Mechanical Engineering
+											Purchasing & Supply
+											Science Laboratory Technology
+											Secretaryship & Management Studies																
+=========================================================================================================
+			  <!--search-box-->
+				<div class="search-box">
+					<form class="input">
+						<input class="sb-search-input input__field--madoka" placeholder="Search..." type="search" id="input-31" />
+						<label class="input__label" for="input-31">
+							<svg class="graphic" width="100%" height="100%" viewBox="0 0 404 77" preserveAspectRatio="none">
+								<path d="m0,0l404,0l0,77l-404,0l0,-77z"/>
+							</svg>
+						</label>
+					</form>
+				</div><!--//end-search-box-->
+
+
+
+				                                        <div class="form-group"> 
+															<label for="exampleInputFile">File input</label> 
+															<input type="file" id="exampleInputFile"> 
+															<p class="help-block">Example block-level help text here.</p> 
+														</div>
+
+
+
+														<div class="checkbox"> 
+															<label> 
+																<input type="checkbox"> Check me out 
+															</label> 
+														</div> 
+
+
+
+                            panel
+							
+						<div class="panel-info widget-shadow"> 
+							<div class="row">
+								 <div class="col-md-12 panel-grids">
+										 <div class="panel panel-primary"> 
+											 <div class="panel-heading"> 
+												 <h3 class="panel-title">Title Here</h3> 
+											 </div> 
+											 <div class="panel-body"> 
+												
+												
+
+											 </div> 
+										 </div>
+									 </div>	
+							</div>
+						</div>
+
+
+						NEW PANEL FOR ALL
+			------------------------------------------------
+					<div class="panel-info widget-shadow"> 
+							<div class="row">
+								 <div class="col-md-12 panel-grids">
+										 <div class="panel panel-primary"> 
+											 <div class="panel-heading"> 
+												 <h3 class="panel-title">Submit Report</h3> 
+											 </div> 
+											 <div class="panel-body"> 
+												<div class="form-body widget_shadow_panel">
+									
+														
+												
+											    </div>
+											 </div> 
+										 </div>
+									 </div>	
+							</div>
+						</div>
+		-------------------------------------------------------------------
+		Basic Table
+		----------------------
+		                <table class="table">
+							<thead>
+								<tr>
+								  <th>#</th>
+								  <th>First Name</th>
+								  <th>Last Name</th>
+								  <th>Username</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+								  <th scope="row">1</th>
+								  <td>Mark</td>
+								  <td>Otto</td>
+								  <td>@mdo</td>
+								</tr>
+								<tr>
+								  <th scope="row">2</th>
+								  <td>Jacob</td>
+								  <td>Thornton</td>
+								  <td>@fat</td>
+								</tr>
+								<tr>
+								  <th scope="row">3</th>
+								  <td>Larry</td>
+								  <td>the Bird</td>
+								  <td>@twitter</td>
+								</tr>
+							</tbody>
+						</table>
+						===================================
+						<div class="panel-body widget-shadow">
+						<h4>Basic Table:</h4>
+						<table class="table">
+							<thead>
+								<tr>
+								  <th>#</th>
+								  <th>First Name</th>
+								  <th>Last Name</th>
+								  <th>Username</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+								  <th scope="row">1</th>
+								  <td>Mark</td>
+								  <td>Otto</td>
+								  <td>@mdo</td>
+								</tr>
+								<tr>
+								  <th scope="row">2</th>
+								  <td>Jacob</td>
+								  <td>Thornton</td>
+								  <td>@fat</td>
+								</tr>
+								<tr>
+								  <th scope="row">3</th>
+								  <td>Larry</td>
+								  <td>the Bird</td>
+								  <td>@twitter</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+		----------------------------------------------------------------------------------------
+		                                                Filter box
+		                               -----------------------------------------
+			                                       <div class="form-group"> 
+														<select id="InputLevel" class="form-control">
+															<option selected="">--Select Level--</option>
+															<option>100</option>
+															<option>200</option>
+															<option>300</option>
+															<option>400</option>
+														</select>
+													</div> 
