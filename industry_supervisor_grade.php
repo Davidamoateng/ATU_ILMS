@@ -9,7 +9,99 @@
     if (!isUser()) {
 		$_SESSION['msg'] = "Please log in first ...";
 		header('location: login.php');
-	}
+    }
+    
+
+	$studentFirstName = $_SESSION['user']['first_name'];
+	$studentLastName = $_SESSION['user']['last_name'];
+    $indexNumber = $_SESSION['user']['user_id'];
+    
+    $student_full_name = $studentFirstName." ".$studentLastName;
+    
+    if (isset($_POST["submit_btn"])) {
+        $specific_skill_1_score = $_POST["SkillRadioBtn_1"];
+        $specific_skill_2_score = $_POST["SkillRadioBtn_2"];
+        $specific_skill_3_score = $_POST["SkillRadioBtn_3"];
+        $specific_skill_4_score = $_POST["SkillRadioBtn_4"];
+
+        $employability_skills_1_score = $_POST["EmployabilityRadioBtn_1"];
+        $employability_skills_2_score = $_POST["EmployabilityRadioBtn_2"];
+        $employability_skills_3_score = $_POST["EmployabilityRadioBtn_3"];
+        $employability_skills_4_score = $_POST["EmployabilityRadioBtn_4"];
+        $employability_skills_5_score = $_POST["EmployabilityRadioBtn_5"];
+        $employability_skills_6_score = $_POST["EmployabilityRadioBtn_6"];
+        $employability_skills_7_score = $_POST["EmployabilityRadioBtn_7"];
+        $employability_skills_8_score = $_POST["EmployabilityRadioBtn_8"];
+        
+
+        $work_attitude_1_score = $_POST["AttitudeRadioBtn_1"];
+        $work_attitude_2_score = $_POST["AttitudeRadioBtn_2"];
+        $work_attitude_3_score = $_POST["AttitudeRadioBtn_3"];
+        $work_attitude_4_score = $_POST["AttitudeRadioBtn_4"];
+
+        $human_relations_1_score = $_POST["RelationshipRadioBtn_1"];
+        $human_relations_2_score = $_POST["RelationshipRadioBtn_2"];
+        $human_relations_3_score = $_POST["RelationshipRadioBtn_3"];
+        $human_relations_4_score = $_POST["RelationshipRadioBtn_4"];
+
+
+        $supervisor_first_name = $_POST["inputSupervisorFirstName"];
+        $supervisor_last_name = $_POST["inputSupervisorLastName"];
+        $supervisor_phone_number = $_POST["inputSupervisorPhoneNumber"];
+        $department_section_unit = $_POST["inputDepartmentSectionUnit"];
+        $general_remarks = $_POST["inputGeneralRemarks"];
+        $suggestions =  $_POST["inputSuggestion"];
+
+        // Calculation of Marks //
+        $grade_score = $specific_skill_1_score + $specific_skill_2_score + $specific_skill_3_score + $specific_skill_4_score + 
+                       $employability_skills_1_score + $employability_skills_2_score + $employability_skills_3_score + $employability_skills_4_score + 
+                       $employability_skills_5_score + $employability_skills_6_score + $employability_skills_7_score + $employability_skills_8_score +
+                       $work_attitude_1_score + $work_attitude_2_score + $work_attitude_3_score + $work_attitude_4_score + 
+                       $human_relations_1_score + $human_relations_2_score + $human_relations_3_score + $human_relations_4_score;
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        
+
+        if ($_POST["inputSupervisorFirstName"] != "" && $_POST["inputSupervisorLastName"] != "" && $_POST["inputSupervisorPhoneNumber"] != "" && $_POST["inputDepartmentSectionUnit"] != "" && $_POST["inputGeneralRemarks"] != "" && $_POST["inputSuggestion"] != "") {
+
+            $mysql_query1 = "INSERT INTO industry_supervisor_grade (`id`, `username`, `index_number`, `specific_skill_1_score`, `specific_skill_2_score`, `specific_skill_3_score`, `specific_skill_4_score`, `employability_skills_1_score`, `employability_skills_2_score`, `employability_skills_3_score`, `employability_skills_4_score`, `employability_skills_5_score`, `employability_skills_6_score`, `employability_skills_7_score`, `employability_skills_8_score`, `work_attitude_1_score`, `work_attitude_2_score`, `work_attitude_3_score`, `work_attitude_4_score`, `human_relations_1_score`, `human_relations_2_score`, `human_relations_3_score`, `human_relations_4_score`, `grade`, `supervisor_first_name`, `supervisor_last_name`, `supervisor_phone_number`, `department_section_unit`, `general_remarks`,`suggestions`, `date`) 
+                             VALUES (NULL, '$student_full_name', '$indexNumber', '$specific_skill_1_score', '$specific_skill_2_score', '$specific_skill_3_score', '$specific_skill_4_score', '$employability_skills_1_score', '$employability_skills_2_score', '$employability_skills_3_score', '$employability_skills_4_score', '$employability_skills_5_score', '$employability_skills_6_score', '$employability_skills_7_score', '$employability_skills_8_score', '$work_attitude_1_score', '$work_attitude_2_score', '$work_attitude_3_score', '$work_attitude_4_score', '$human_relations_1_score', '$human_relations_2_score', '$human_relations_3_score','$human_relations_4_score', '$grade_score', '$supervisor_first_name', '$supervisor_last_name', '$supervisor_phone_number', '$department_section_unit','$general_remarks', '$suggestions', CURRENT_TIMESTAMP)";
+        
+        echo "<script>alert('Assessment has been submitted successfully ...')</script>";
+
+        if ($execute_mysql_query1 = mysqli_query($db, $mysql_query1)) {
+
+            $mysql_query2 = "SELECT * FROM industrial_attachment_registration WHERE index_number = '$indexNumber'";
+            $execute_mysql_query2 = mysqli_query($db, $mysql_query2);
+            $check_existence = mysqli_num_rows($execute_mysql_query2);
+            
+            if ($check_existence == 1) {
+
+                $mysql_query3 = "UPDATE `industrial_attachment_registration` SET `industry_supervisor_grade` = '$grade_score' WHERE index_number = '$indexNumber'";
+                $execute_mysql_query3 = mysqli_query($db, $mysql_query3);
+
+            }else{
+
+                $mysql_query4 = "SELECT * FROM virtual_attachment_registration WHERE index_number='$indexNumber'";
+		        $execute_mysql_query4 = mysqli_query($db, $mysql_query4);
+                $check_existence2 = mysqli_num_rows($execute_mysql_query4);
+
+                if ($check_existence2 == 1) {
+
+                    $mysql_query5 = "UPDATE virtual_attachment_registration SET industry_supervisor_grade = '$grade_score' WHERE index_number = '$indexNumber'";
+                    $execute_mysql_query5 = mysqli_query($db, $mysql_query5);
+
+                }
+
+            }
+        }
+
+    }else {
+        echo "<script>alert('Error... Assessment has not been submitted..!!')</script>";
+    }              
+        
+
+    }
+
 ?>
 
 <!DOCTYPE HTML>
@@ -308,22 +400,22 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
                                                                         <span>1. Ability to understand issues</span>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input"  type="radio" name="SkillRadioBtn_1" value="0">
+                                                                        <input class="form-check-input"  type="radio" name="SkillRadioBtn_1" value="0" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="SkillRadioBtn_1" value="1">
+                                                                        <input class="form-check-input" type="radio" name="SkillRadioBtn_1" value="1" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="SkillRadioBtn_1" value="2">
+                                                                        <input class="form-check-input" type="radio" name="SkillRadioBtn_1" value="2" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="SkillRadioBtn_1" value="3">
+                                                                        <input class="form-check-input" type="radio" name="SkillRadioBtn_1" value="3" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="SkillRadioBtn_1" value="4">
+                                                                        <input class="form-check-input" type="radio" name="SkillRadioBtn_1" value="4" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="SkillRadioBtn_1" value="5">
+                                                                        <input class="form-check-input" type="radio" name="SkillRadioBtn_1" value="5" required>
                                                                     </td>
                                                                 </tr>
 
@@ -332,22 +424,22 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
                                                                         <span>2. Ability to use his/her judgment</span>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input"  type="radio" name="SkillRadioBtn_2" value="0">
+                                                                        <input class="form-check-input"  type="radio" name="SkillRadioBtn_2" value="0" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="SkillRadioBtn_2" value="1">
+                                                                        <input class="form-check-input" type="radio" name="SkillRadioBtn_2" value="1" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="SkillRadioBtn_2" value="2">
+                                                                        <input class="form-check-input" type="radio" name="SkillRadioBtn_2" value="2" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="SkillRadioBtn_2" value="3">
+                                                                        <input class="form-check-input" type="radio" name="SkillRadioBtn_2" value="3" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="SkillRadioBtn_2" value="4">
+                                                                        <input class="form-check-input" type="radio" name="SkillRadioBtn_2" value="4" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="SkillRadioBtn_2" value="5">
+                                                                        <input class="form-check-input" type="radio" name="SkillRadioBtn_2" value="5" required>
                                                                     </td>
                                                                 </tr>
                                                                 
@@ -356,22 +448,22 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
                                                                         <span>3. Ability to give judgment</span>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input"  type="radio" name="SkillRadioBtn_3" value="0">
+                                                                        <input class="form-check-input"  type="radio" name="SkillRadioBtn_3" value="0" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="SkillRadioBtn_3" value="1">
+                                                                        <input class="form-check-input" type="radio" name="SkillRadioBtn_3" value="1" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="SkillRadioBtn_3" value="2">
+                                                                        <input class="form-check-input" type="radio" name="SkillRadioBtn_3" value="2" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="SkillRadioBtn_3" value="3">
+                                                                        <input class="form-check-input" type="radio" name="SkillRadioBtn_3" value="3" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="SkillRadioBtn_3" value="4">
+                                                                        <input class="form-check-input" type="radio" name="SkillRadioBtn_3" value="4" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="SkillRadioBtn_3" value="5">
+                                                                        <input class="form-check-input" type="radio" name="SkillRadioBtn_3" value="5" required>
                                                                     </td>
                                                                 </tr>
 
@@ -380,22 +472,22 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
                                                                         <span>4. Creativity</span>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input"  type="radio" name="SkillRadioBtn_4" value="0">
+                                                                        <input class="form-check-input"  type="radio" name="SkillRadioBtn_4" value="0" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="SkillRadioBtn_4" value="1">
+                                                                        <input class="form-check-input" type="radio" name="SkillRadioBtn_4" value="1" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="SkillRadioBtn_4" value="2">
+                                                                        <input class="form-check-input" type="radio" name="SkillRadioBtn_4" value="2" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="SkillRadioBtn_4" value="3">
+                                                                        <input class="form-check-input" type="radio" name="SkillRadioBtn_4" value="3" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="SkillRadioBtn_4" value="4">
+                                                                        <input class="form-check-input" type="radio" name="SkillRadioBtn_4" value="4" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="SkillRadioBtn_4" value="5">
+                                                                        <input class="form-check-input" type="radio" name="SkillRadioBtn_4" value="5" required>
                                                                     </td>
                                                                 </tr>
 
@@ -409,22 +501,22 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
                                                                         <span>1. Ability to complete work on schedule</span>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input"  type="radio" name="EmployabilityRadioBtn_1" value="0">
+                                                                        <input class="form-check-input"  type="radio" name="EmployabilityRadioBtn_1" value="0" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_1" value="1">
+                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_1" value="1" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_1" value="2">
+                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_1" value="2" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_1" value="3">
+                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_1" value="3" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_1" value="4">
+                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_1" value="4" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_1" value="5">
+                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_1" value="5" required>
                                                                     </td>
                                                                 </tr>
 
@@ -433,22 +525,22 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
                                                                         <span>2. Ability to follow instructions carefully</span>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input"  type="radio" name="EmployabilityRadioBtn_2" value="0">
+                                                                        <input class="form-check-input"  type="radio" name="EmployabilityRadioBtn_2" value="0" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_2" value="1">
+                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_2" value="1" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_2" value="2">
+                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_2" value="2" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_2" value="3">
+                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_2" value="3" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_2" value="4">
+                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_2" value="4" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_2" value="5">
+                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_2" value="5" required>
                                                                     </td>
                                                                 </tr>
 
@@ -457,22 +549,22 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
                                                                         <span>3. Ability to take initiative</span>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input"  type="radio" name="EmployabilityRadioBtn_3" value="0">
+                                                                        <input class="form-check-input"  type="radio" name="EmployabilityRadioBtn_3" value="0" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_3" value="1">
+                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_3" value="1" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_3" value="2">
+                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_3" value="2" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_3" value="3">
+                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_3" value="3" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_3" value="4">
+                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_3" value="4" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_3" value="5">
+                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_3" value="5" required>
                                                                     </td>
                                                                 </tr>
 
@@ -481,22 +573,22 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
                                                                         <span>4. Ability to work with little supervision</span>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input"  type="radio" name="EmployabilityRadioBtn_4" value="0">
+                                                                        <input class="form-check-input"  type="radio" name="EmployabilityRadioBtn_4" value="0" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_4" value="1">
+                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_4" value="1" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_4" value="2">
+                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_4" value="2" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_4" value="3">
+                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_4" value="3" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_4" value="4">
+                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_4" value="4" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_4" value="5">
+                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_4" value="5" required>
                                                                     </td>
                                                                 </tr>
 
@@ -505,22 +597,22 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
                                                                         <span>5. Ability to work with other staff</span>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input"  type="radio" name="EmployabilityRadioBtn_5" value="0">
+                                                                        <input class="form-check-input"  type="radio" name="EmployabilityRadioBtn_5" value="0" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_5" value="1">
+                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_5" value="1" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_5" value="2">
+                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_5" value="2" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_5" value="3">
+                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_5" value="3" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_5" value="4">
+                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_5" value="4" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_5" value="5">
+                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_5" value="5" required>
                                                                     </td>
                                                                 </tr>
 
@@ -529,22 +621,22 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
                                                                         <span>6. Adherence to organization rules and regulations</span>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input"  type="radio" name="SkillRadioBtn_6" id="Radio_0" value="0">
+                                                                        <input class="form-check-input"  type="radio" name="EmployabilityRadioBtn_6" id="Radio_0" value="0" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="SkillRadioBtn_6" id="Radio_1" value="1">
+                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_6" id="Radio_1" value="1" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="SkillRadioBtn_6" id="Radio_2" value="2">
+                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_6" id="Radio_2" value="2" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="SkillRadioBtn_6" id="Radio_3" value="3">
+                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_6" id="Radio_3" value="3" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="SkillRadioBtn_6" id="Radio_4" value="4">
+                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_6" id="Radio_4" value="4" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="SkillRadioBtn_6" id="Radio_5" value="5">
+                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_6" id="Radio_5" value="5" required>
                                                                     </td>
                                                                 </tr>
 
@@ -553,22 +645,22 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
                                                                         <span>7. Adherence to safety and environmental rules</span>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input"  type="radio" name="EmployabilityRadioBtn_7" value="0">
+                                                                        <input class="form-check-input"  type="radio" name="EmployabilityRadioBtn_7" value="0" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_7" value="1">
+                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_7" value="1" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_7" value="2">
+                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_7" value="2" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_7" value="3">
+                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_7" value="3" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_7" value="4">
+                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_7" value="4" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_7" value="5">
+                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_7" value="5" required>
                                                                     </td>
                                                                 </tr>
 
@@ -577,22 +669,22 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
                                                                         <span>8. Resourcefulness</span>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input"  type="radio" name="EmployabilityRadioBtn_8" value="0">
+                                                                        <input class="form-check-input"  type="radio" name="EmployabilityRadioBtn_8" value="0" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_8" value="1">
+                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_8" value="1" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_8" value="2">
+                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_8" value="2" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_8" value="3">
+                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_8" value="3" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_8" value="4">
+                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_8" value="4" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_8" value="5">
+                                                                        <input class="form-check-input" type="radio" name="EmployabilityRadioBtn_8" value="5" required>
                                                                     </td>
                                                                 </tr>
 
@@ -607,22 +699,22 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
                                                                         <span>1. Attendance to work</span>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input"  type="radio" name="AttitudeRadioBtn_1" value="0">
+                                                                        <input class="form-check-input"  type="radio" name="AttitudeRadioBtn_1" value="0" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="AttitudeRadioBtn_1" value="1">
+                                                                        <input class="form-check-input" type="radio" name="AttitudeRadioBtn_1" value="1" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="AttitudeRadioBtn_1" value="2">
+                                                                        <input class="form-check-input" type="radio" name="AttitudeRadioBtn_1" value="2" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="AttitudeRadioBtn_1" value="3">
+                                                                        <input class="form-check-input" type="radio" name="AttitudeRadioBtn_1" value="3" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="AttitudeRadioBtn_1" value="4">
+                                                                        <input class="form-check-input" type="radio" name="AttitudeRadioBtn_1" value="4" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="AttitudeRadioBtn_1" value="5">
+                                                                        <input class="form-check-input" type="radio" name="AttitudeRadioBtn_1" value="5" required>
                                                                     </td>
                                                                 </tr>
 
@@ -631,22 +723,22 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
                                                                         <span>2. Punctuality</span>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input"  type="radio" name="AttitudeRadioBtn_2" value="0">
+                                                                        <input class="form-check-input"  type="radio" name="AttitudeRadioBtn_2" value="0" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="AttitudeRadioBtn_2" value="1">
+                                                                        <input class="form-check-input" type="radio" name="AttitudeRadioBtn_2" value="1" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="AttitudeRadioBtn_2" value="2">
+                                                                        <input class="form-check-input" type="radio" name="AttitudeRadioBtn_2" value="2" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="AttitudeRadioBtn_2" value="3">
+                                                                        <input class="form-check-input" type="radio" name="AttitudeRadioBtn_2" value="3" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="AttitudeRadioBtn_2" value="4">
+                                                                        <input class="form-check-input" type="radio" name="AttitudeRadioBtn_2" value="4" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="AttitudeRadioBtn_2" value="5">
+                                                                        <input class="form-check-input" type="radio" name="AttitudeRadioBtn_2" value="5" required>
                                                                     </td>
                                                                 </tr>
 
@@ -655,22 +747,22 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
                                                                         <span>3. Desire to work</span>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input"  type="radio" name="AttitudeRadioBtn_3" value="0">
+                                                                        <input class="form-check-input"  type="radio" name="AttitudeRadioBtn_3" value="0" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="AttitudeRadioBtn_3" value="1">
+                                                                        <input class="form-check-input" type="radio" name="AttitudeRadioBtn_3" value="1" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="AttitudeRadioBtn_3" value="2">
+                                                                        <input class="form-check-input" type="radio" name="AttitudeRadioBtn_3" value="2" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="AttitudeRadioBtn_3" value="3">
+                                                                        <input class="form-check-input" type="radio" name="AttitudeRadioBtn_3" value="3" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="AttitudeRadioBtn_3" value="4">
+                                                                        <input class="form-check-input" type="radio" name="AttitudeRadioBtn_3" value="4" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="AttitudeRadioBtn_3" value="5">
+                                                                        <input class="form-check-input" type="radio" name="AttitudeRadioBtn_3" value="5" required>
                                                                     </td>
                                                                 </tr>
 
@@ -679,22 +771,22 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
                                                                         <span>4. Willingness to accept new ideas and suggestion</span>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input"  type="radio" name="AttitudeRadioBtn_4" value="0">
+                                                                        <input class="form-check-input"  type="radio" name="AttitudeRadioBtn_4" value="0" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="AttitudeRadioBtn_4" value="1">
+                                                                        <input class="form-check-input" type="radio" name="AttitudeRadioBtn_4" value="1" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="AttitudeRadioBtn_4" value="2">
+                                                                        <input class="form-check-input" type="radio" name="AttitudeRadioBtn_4" value="2" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="AttitudeRadioBtn_4" value="3">
+                                                                        <input class="form-check-input" type="radio" name="AttitudeRadioBtn_4" value="3" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="AttitudeRadioBtn_4" value="4">
+                                                                        <input class="form-check-input" type="radio" name="AttitudeRadioBtn_4" value="4" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="AttitudeRadioBtn_4" value="5">
+                                                                        <input class="form-check-input" type="radio" name="AttitudeRadioBtn_4" value="5" required>
                                                                     </td>
                                                                 </tr>
 
@@ -709,22 +801,22 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
                                                                         <span>1. Relationship with subordinates</span>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input"  type="radio" name="RelationshipRadioBtn_1" value="0">
+                                                                        <input class="form-check-input"  type="radio" name="RelationshipRadioBtn_1" value="0" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="RelationshipRadioBtn_1" value="1">
+                                                                        <input class="form-check-input" type="radio" name="RelationshipRadioBtn_1" value="1" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="RelationshipRadioBtn_1" value="2">
+                                                                        <input class="form-check-input" type="radio" name="RelationshipRadioBtn_1" value="2" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="RelationshipRadioBtn_1" value="3">
+                                                                        <input class="form-check-input" type="radio" name="RelationshipRadioBtn_1" value="3" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="RelationshipRadioBtn_1" value="4">
+                                                                        <input class="form-check-input" type="radio" name="RelationshipRadioBtn_1" value="4" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="RelationshipRadioBtn_1" value="5">
+                                                                        <input class="form-check-input" type="radio" name="RelationshipRadioBtn_1" value="5" required>
                                                                     </td>
                                                                 </tr>
 
@@ -733,22 +825,22 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
                                                                         <span>2. Relationship with colleagues</span>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input"  type="radio" name="RelationshipRadioBtn_2" value="0">
+                                                                        <input class="form-check-input"  type="radio" name="RelationshipRadioBtn_2" value="0" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="RelationshipRadioBtn_2" value="1">
+                                                                        <input class="form-check-input" type="radio" name="RelationshipRadioBtn_2" value="1" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="RelationshipRadioBtn_2" value="2">
+                                                                        <input class="form-check-input" type="radio" name="RelationshipRadioBtn_2" value="2" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="RelationshipRadioBtn_2" value="3">
+                                                                        <input class="form-check-input" type="radio" name="RelationshipRadioBtn_2" value="3" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="RelationshipRadioBtn_2" value="4">
+                                                                        <input class="form-check-input" type="radio" name="RelationshipRadioBtn_2" value="4" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="RelationshipRadioBtn_2" value="5">
+                                                                        <input class="form-check-input" type="radio" name="RelationshipRadioBtn_2" value="5" required>
                                                                     </td>
                                                                 </tr>
 
@@ -757,22 +849,22 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
                                                                         <span>3. Relationship with superiors</span>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input"  type="radio" name="RelationshipRadioBtn_3" value="0">
+                                                                        <input class="form-check-input"  type="radio" name="RelationshipRadioBtn_3" value="0" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="RelationshipRadioBtn_3" value="1">
+                                                                        <input class="form-check-input" type="radio" name="RelationshipRadioBtn_3" value="1" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="RelationshipRadioBtn_3" value="2">
+                                                                        <input class="form-check-input" type="radio" name="RelationshipRadioBtn_3" value="2" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="RelationshipRadioBtn_3" value="3">
+                                                                        <input class="form-check-input" type="radio" name="RelationshipRadioBtn_3" value="3" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="RelationshipRadioBtn_3" value="4">
+                                                                        <input class="form-check-input" type="radio" name="RelationshipRadioBtn_3" value="4" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="RelationshipRadioBtn_3" value="5">
+                                                                        <input class="form-check-input" type="radio" name="RelationshipRadioBtn_3" value="5" required>
                                                                     </td>
                                                                 </tr>
 
@@ -781,64 +873,65 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
                                                                         <span>4. Emotions stability</span>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input"  type="radio" name="RelationshipRadioBtn_4" value="0">
+                                                                        <input class="form-check-input"  type="radio" name="RelationshipRadioBtn_4" value="0" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="RelationshipRadioBtn_4" value="1">
+                                                                        <input class="form-check-input" type="radio" name="RelationshipRadioBtn_4" value="1" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="RelationshipRadioBtn_4" value="2">
+                                                                        <input class="form-check-input" type="radio" name="RelationshipRadioBtn_4" value="2"required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="RelationshipRadioBtn_4" value="3">
+                                                                        <input class="form-check-input" type="radio" name="RelationshipRadioBtn_4" value="3" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="RelationshipRadioBtn_4" value="4">
+                                                                        <input class="form-check-input" type="radio" name="RelationshipRadioBtn_4" value="4" required>
                                                                     </td>
                                                                     <td scope="row">
-                                                                        <input class="form-check-input" type="radio" name="RelationshipRadioBtn_4" value="5">
+                                                                        <input class="form-check-input" type="radio" name="RelationshipRadioBtn_4" value="5" required>
                                                                     </td>
                                                                 </tr>
                                                             </tbody> 
                                                         </table>
 
                                                         <div class="hr2"></div>
+                                                    
 
                                                         <div class="row">
                                                             <div class="form-group col-md-6"> 
-                                                                <label for="InputFirstName">First Name:</label> 
-                                                                <input type="text" class="form-control" id="FirstName" placeholder="Enter First Name" required> 
+                                                                <label for="InputFirstName">Supervisor First Name<b style="color:red;">*</b>:</label> 
+                                                                <input type="text" class="form-control" name="inputSupervisorFirstName" onkeypress="return alphabet(event)" id="FirstName" placeholder="Enter First Name" required> 
                                                             </div>
                                                             <div class="form-group col-md-6"> 
-                                                                <label for="InputLastName">Last Name:</label> 
-                                                                <input type="text" class="form-control" id="LastName" placeholder="Enter Last Name" required> 
+                                                                <label for="InputLastName">Supervisor Last Name<b style="color:red;">*</b>:</label> 
+                                                                <input type="text" class="form-control" name="inputSupervisorLastName" onkeypress="return alphabet(event)" id="LastName" placeholder="Enter Last Name" required> 
                                                             </div> 
                                                         </div> 
 
                                                         <div class="row">
                                                             <div class="form-group col-md-6"> 
-                                                                <label for="InputPhoneNumber">Phone Number:</label> 
-                                                                <input type="text" class="form-control" id="PhoneNumber" placeholder="Enter Phone Number" required> 
+                                                                <label for="InputPhoneNumber">Supervisor Phone Number<b style="color:red;">*</b>:</label> 
+                                                                <input type="text" class="form-control" name="inputSupervisorPhoneNumber" onkeypress="return number_plus(event)" id="PhoneNumber" placeholder="Enter Phone Number" required> 
                                                             </div>
                                                             <div class="form-group col-md-6"> 
-                                                                <label for="InputDate">Date:</label> 
-                                                                <input type="date" class="form-control" id="Date" required> 
+                                                                <label for="InputDepartment">Department / Section / Unit<b style="color:red;">*</b>:</label> 
+                                                                <input type="text" class="form-control" name="inputDepartmentSectionUnit" onkeypress="return alphabet_space(event)" id="DepartmentSectionUnit" placeholder="Enter Department / Section / Unit" required> 
                                                             </div> 
                                                         </div> 
 
                                                         <div class="row">
                                                             <div class="form-group col-md-6">
-                                                                <label for="inputGeneralRemarks">General Remarks:</label>
-                                                                <textarea class="form-control" id="GeneralRemarks" name="GeneralRemarks" rows="5" required></textarea>
+                                                                <label for="inputGeneralRemarks">General Remarks<b style="color:red;">*</b>:</label>
+                                                                <textarea class="form-control" name="inputGeneralRemarks" onkeypress="return alphabet_space(event)" id="GeneralRemarks" rows="5" required></textarea>
                                                             </div>
                                                             <div class="form-group col-md-6">
-                                                                <label for="inputSuggestion">Suggestion(s):</label>
-                                                                <textarea class="form-control" id="Suggestion" name="Suggestion" rows="5" required></textarea>
+                                                                <label for="inputSuggestion">Suggestion(s)<b style="color:red;">*</b>:</label>
+                                                                <textarea class="form-control" name="inputSuggestion" onkeypress="return alphabet_space(event)" id="Suggestion" rows="5" required></textarea>
                                                             </div>
                                                         </div>
 
                                                         <div class="text-center">
-                                                            <button type="submit" class="btn btn-primary"><i class="fa fa-upload" ></i> Submit</button>
+                                                            <button type="submit" class="btn btn-primary" name="submit_btn"><i class="fa fa-upload" ></i> Submit</button>
                                                             <a href="industry_supervisor_login.php" class="btn btn-danger"> <i class="fa fa-sign-out" ></i> Logout</a>
                                                         </div>
 													</form> 

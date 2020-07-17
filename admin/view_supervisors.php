@@ -10,6 +10,57 @@
 	  $_SESSION['msg'] = "Please log in first ...";
 	  header('location: ../login.php');
   }
+
+  $mysql_query_1 = "SELECT * FROM school_supervisors";
+
+  if (isset($_POST["search_btn"])) {
+	  
+	  $search_by = $_POST["inputFilterBy"];
+	  $search_term = $_POST["inputSearch"];
+
+	  if ($search_by !="" && $search_term != "") {
+		  
+		switch ($search_by) {
+
+			case '--FilterBy--':
+
+				$mysql_query_1 = "SELECT * FROM school_supervisors";
+				break;
+
+			case 'Id':
+
+				$mysql_query_1 = "SELECT * FROM school_supervisors WHERE supervisor_id LIKE '%$search_term%'";
+				break;
+
+			case 'Name':
+
+				$mysql_query_1 = "SELECT * FROM school_supervisors WHERE supervisor_name LIKE '%$search_term%'";
+				break;
+
+			case 'Faculty':
+
+				$mysql_query_1 = "SELECT * FROM school_supervisors WHERE supervisor_faculty LIKE '%$search_term%'";
+				break;
+
+			case 'Department':
+
+				$mysql_query_1 = "SELECT * FROM school_supervisors WHERE supervisor_department LIKE '%$search_term%'";
+				break;
+
+			case 'Region':
+
+				$mysql_query_1 = "SELECT * FROM school_supervisors WHERE supervisor_region_residence LIKE '%$search_term%'";
+				break;
+			
+			default:
+
+			    $mysql_query_1 = "SELECT * FROM school_supervisors";
+				break;
+		}
+
+	  }
+
+  }
 ?>
 
 <!DOCTYPE HTML>
@@ -178,7 +229,7 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
 
 			  <hr class="sidebar-divider">
 
-			  <li>
+			  <!-- <li>
 				<a href="view_student_logbooks.php">
 					<i class="fa fa-book"></i> 
 					<span>View Student Logbook</span>
@@ -193,6 +244,15 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
 					<span>View Student Reports</span>
 				</a>
 			</li>	
+
+			  <hr class="sidebar-divider"> -->
+
+			  <li class="treeview">
+				<a href="add_admin.php">
+				 <i class="fa fa-plus"></i>
+				 <span>Add New Admin</span>
+				</a>
+			  </li>
 
 			  <hr class="sidebar-divider">
 
@@ -289,26 +349,33 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
 										<div class="form-body widget_shadow_panel">
 
 											<div class="row">
-												<!-- Filter Box -->
-											<div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">  
-												<select id="InputLevel" class="form-control">
-													<option selected=""><b>--FilterBy--</b></option>
-													<option>Name</option>
-													<option>Faculty</option>
-													<option>Department</option>
-													<option>Resident Region</option>
-												</select>
-											</div> 
-											<!--// Filter Box -->
 
-											<!-- Search Box -->
-											<form class="form-inline col-xs-9 col-sm-9 col-md-9 col-lg-9" style="padding-left: 324px;"> 
-												<div class="form-group"> 
-													<input type="search" class="form-control" placeholder="Search term ..." aria-label="Search" required> 
-												</div> 
-												<button type="submit" class="btn btn-default btn-sm">Search</button> 
-											</form>
-											<!--// Search Box -->
+												<form action="" method="post">
+
+												    <!-- Filter Box -->
+													<div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">  
+														<select id="InputLevel" class="form-control" name="inputFilterBy">
+															<option selected=""><b>--FilterBy--</b></option>
+															<option>Id</option>
+															<option>Name</option>
+															<option>Faculty</option>
+															<option>Department</option>
+															<option>Region</option>
+														</select>
+													</div> 
+													<!--// Filter Box -->
+
+													<!-- Search Box -->
+													<div class="form-inline col-xs-9 col-sm-9 col-md-9 col-lg-9" style="padding-left: 324px;"> 
+														<div class="form-group"> 
+															<input type="search" class="form-control" name="inputSearch" onkeypress="return alpha_numeric(event)" placeholder="Search term ..." aria-label="Search" required> 
+														</div> 
+														<button type="submit" class="btn btn-default btn-sm" name="search_btn">Search</button> 
+													</div>
+													<!--// Search Box -->
+
+												</form>
+
 											</div>
 
 											<div class="hr2"></div>
@@ -316,65 +383,38 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
 											 <div class="panel-body widget-shadow" style="overflow-x: auto">
 												<!-- TABLE STARTS HERE -->
 												<table class="table table-striped table-condensed">
+
 													<thead>
 														<tr class="active">
-															<th scope="col">Name</th>
-															<th scope="col">Faculty</th>
-															<th scope="col">Department</th>
-															<th scope="col">Phone Number</th>
-															<th scope="col">Resident Region</th>
-															<th scope="col">E-mail</th>
+															<th scope="col" style="text-align:center">Name</th>
+															<th scope="col" style="text-align:center">Faculty</th>
+															<th scope="col" style="text-align:center">Department</th>
+															<th scope="col" style="text-align:center">Phone Number</th>
+															<th scope="col" style="text-align:center">Residence Region</th>
+															<th scope="col" style="text-align:center">Supervisor Id</th>
 														</tr>
 													</thead>
+
 													<tbody>
-														<tr>
-															<td>Wisdom Torgby</td>
-															<td>School of Applied Sciences & Arts</td>
-															<td>Computer Science</td>
-															<td>0558890232</td>
-															<td>Greater Accra</td>
-															<td>wisdom@gmail.com</td>
-														</tr>
-														<tr>
-															<td>Wisdom Torgby</td>
-															<td>School of Applied Sciences & Arts</td>
-															<td>Computer Science</td>
-															<td>0558890232</td>
-															<td>Greater Accra</td>
-															<td>wisdom@gmail.com</td>
-														</tr>
-														<tr>
-															<td>Wisdom Torgby</td>
-															<td>School of Applied Sciences & Arts</td>
-															<td>Computer Science</td>
-															<td>0558890232</td>
-															<td>Greater Accra</td>
-															<td>wisdom@gmail.com</td>
-														</tr>
-														<tr>
-															<td>Wisdom Torgby</td>
-															<td>School of Applied Sciences & Arts</td>
-															<td>Computer Science</td>
-															<td>0558890232</td>
-															<td>Greater Accra</td>
-															<td>wisdom@gmail.com</td>
-														</tr>
-														<tr>
-															<td>Wisdom Torgby</td>
-															<td>School of Applied Sciences & Arts</td>
-															<td>Computer Science</td>
-															<td>0558890232</td>
-															<td>Greater Accra</td>
-															<td>wisdom@gmail.com</td>
-														</tr>
-														<tr>
-															<td>Wisdom Torgby</td>
-															<td>School of Applied Sciences & Arts</td>
-															<td>Computer Science</td>
-															<td>0558890232</td>
-															<td>Greater Accra</td>
-															<td>wisdom@gmail.com</td>
-														</tr>
+
+														<?php 
+
+															// Get School Supervisors Data  //
+															$mysql_query_command_1 = $mysql_query_1;
+															$execute_result_query = mysqli_query($db, $mysql_query_command_1);
+
+														    while ($row_set = mysqli_fetch_array($execute_result_query)) {
+																echo "<tr>";
+																	echo "<td style='text-align:center'>".$row_set["supervisor_name"]."</td>";
+																	echo "<td style='text-align:center'>".$row_set["supervisor_faculty"]."</td>";
+																	echo "<td style='text-align:center'>".$row_set["supervisor_department"]."</td>";
+																	echo "<td style='text-align:center'>".$row_set["supervisor_contact"]."</td>";
+																	echo "<td style='text-align:center'>".$row_set["supervisor_region_residence"]."</td>";
+																	echo "<td style='text-align:center'>".$row_set["supervisor_id"]."</td>";
+														        echo "</tr>";
+															}
+
+														?>
 														
 													</tbody>
 												</table>

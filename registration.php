@@ -10,6 +10,12 @@
 		$_SESSION['msg'] = "Please log in first ...";
 		header('location: login.php');
 	}
+
+	// $studentFirstName = $_COOKIE["firstName"];
+	// $studentLastName = $_COOKIE["last_name"];
+
+	$studentFirstName = $_SESSION['user']['first_name'];
+	$studentLastName = $_SESSION['user']['last_name'];
 ?>
 
 <!DOCTYPE HTML>

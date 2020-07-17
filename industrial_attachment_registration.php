@@ -1,5 +1,6 @@
 <?php 
-    include('functions.php'); 
+	include('functions.php');
+	//include('user_reg_functions.php');
 
 	if (!isLoggedIn()) {
 		$_SESSION['msg'] = "Please log in first ...";
@@ -10,11 +11,11 @@
 		$_SESSION['msg'] = "Please log in first ...";
 		header('location: login.php');
 	}
-
-	$studentFirstName = $_COOKIE["first_name"];
-	$studentLastName = $_COOKIE["last_name"];
-	$indexNumberHolder = $_COOKIE["index_number"];
-	$studentIndexNumber = "";
+	
+	$firstName = $_SESSION['user']['first_name'];
+	$lastName = $_SESSION['user']['last_name'];
+	$indexNumberHolder = $_SESSION['user']['user_id'];
+	$indexNumber = "";
 
 	$programs = array("--Select Program--","Accountancy","Building Technology","Civil Engineering","Computer Science","Electrical / Electronics Engineering",
 	"Fashion Design & Textiles","Furniture Design & Production","Hotel, Catering & Institutional Management","Languages & Liberal Studies","Mathematics & Statistics",
@@ -28,43 +29,60 @@
 	$levels = array("--Select Level--","100","200","300");
 
 	if (isset($_POST["register_btn"])) {
-		if ($_POST["inputProgram"] != "" && $_POST["inputLevel"] != "" && $_POST["inputSession"] != "") {
-			
-			$otherName = $_POST["inputOtherName"];
+
+		    $otherName = $_POST["inputOtherName"];
 			$programSelected = $_POST["inputProgram"];
 			$levelSelected = $_POST["inputLevel"];
 			$sessionSelected = $_POST["inputSession"];
 			$indexNumber = $_POST["inputIndexNumber"];
 			$faculty = $_POST["inputFaculty"];
 
+		if ($_POST["inputProgram"] != "" && $_POST["inputLevel"] != "" && $_POST["inputSession"] != "") {      
+
 			$preventDoubleRegistration = "SELECT * FROM virtual_attachment_registration WHERE index_number = '$indexNumber' LIMIT 1";
 			$executeDoubleRegistration = mysqli_query($db, $preventDoubleRegistration);
 			$checkPrevention = mysqli_num_rows($executeDoubleRegistration);
 
 			if ($checkPrevention == 1) {
-				echo "<script> alert('Sorry...You have already registered for Virtual Attachment..!') </script>";
+
+				echo "<script> alert('Sorry... You have already registered for Virtual Attachment..!') </script>";
+
 			}else{
 
 				$checkUserExistence = "SELECT * FROM  industrial_attachment_registration WHERE index_number = '$indexNumber' LIMIT 1";
 				$executeCheckExistence = mysqli_query($db, $checkUserExistence);
 				$checkUser = mysqli_num_rows($executeCheckExistence);
 
-				if ($checkUser == 1) {
-					echo "<script> alert('Sorry...You have registered already..!') </script>";
-				}else {
 
-					$insertDetailsCommand = "INSERT INTO `industrial_attachment_registration` (`first_name`, `last_name`, `other_name`, `index_number`, `program`, `level`, `session`, `faculty`, `date`)
-											 VALUES ('$studentFirstName', '$studentLastName', '$otherName', '$studentIndexNumber', '$programSelected', '$levelSelected', '$sessionSelected', '$faculty', CURRENT_TIMESTAMP)";
-											 
-					if ($runInsertQuery = mysqli_query($db, $insertDetailsCommand)) {
-						echo "<script> alert('Details have been sent successfully') </script>";
-					}else {
-						echo "<script> alert('Sorry...Details not submitted..!') </script>";
+
+				if ($checkUser == 1) {
+
+					echo "<script> alert('Sorry... You have already registered Industrial Attachment..!') </script>";
+					
+					
+				}else{
+
+					$insertDetailsCommand = "INSERT INTO industrial_attachment_registration (`first_name`, `last_name`, `other_name`, `index_number`, `program`, `level`, `session`, `faculty`, `date`)
+											VALUES ('$firstName', '$lastName', '$otherName', '$indexNumber', '$programSelected', '$levelSelected', '$sessionSelected', '$faculty', CURRENT_TIMESTAMP)";
+				
+
+					if ($run_query = mysqli_query($db, $insertDetailsCommand)) {
+
+						echo "<script> alert('Congrats... You have been registered Successfully for Industrial Attachment') </script>";
+
+					}else{
+
+						echo "<script> alert('Sorry... Your registration failed..!') </script>";
+				        //header('location: registration.php');
+
 					}
+
 				}
 			}
 		}
 	}
+
+	
 ?>
 
 <!DOCTYPE HTML>
@@ -321,87 +339,71 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
                                      </div> 
                                      <div class="panel-body"> 
                                         
-										<form class="form-body widget_shadow_panel" action="">
+										<form class="form-body widget_shadow_panel" action="" method="post">
 											<div class="row">
 													<div class="form-group col-md-6"> 
-														<label for="inputFirstName">First Name:</label> 
-														<input type="text" class="form-control" id="inputFirstName" name="inputFirstName" disabled value="<?php echo $studentFirstName; ?>" placeholder="Enter First Name" required> 
+														<label for="inputFirstName">First Name<b style="color:red;">*</b>:</label>
+														<input type="text" class="form-control" id="FirstName" name="inputFirstName" disabled value="<?php echo $firstName; ?>" onkeypress="return alphabet(event)" placeholder="Enter First Name" required> 
 													</div>
 													<div class="form-group col-md-6"> 
-														<label for="inputLastName">Last Name:</label> 
-														<input type="text" class="form-control" id="inputLastName" name="inputLastName" disabled value="<?php echo $studentLastName; ?>" placeholder="Enter Last Name:" required> 
+														<label for="inputLastName">Last Name<b style="color:red;">*</b>:</label> 
+														<input type="text" class="form-control" id="LastName" name="inputLastName" disabled value="<?php echo $lastName; ?>" onkeypress="return alphabet(event)" placeholder="Enter Last Name:" required> 
 													</div> 
 												</div> 
 		
 												<div class="row">
 														<div class="form-group col-md-6"> 
 															<label for="inputOtherNames"><b>Other Name(s):</b></label> 
-															<input type="text" class="form-control" id="inputOtherName" name="inputOtherName" placeholder="Enter Other Name(s)"> 
+															<input type="text" class="form-control" id="OtherName" name="inputOtherName" onkeypress="return alphabet(event)" placeholder="Enter Other Name(s)"> 
 														</div>
 														<div class="form-group col-md-6"> 
-															<label for="inputIndexNumber">Index Number:</label> 
-															<input type="text" class="form-control" id="inputIndexNumber" name="inputIndexNumber" value="<?php echo $indexNumberHolder; ?>" placeholder="Enter Index Number"> 
+															<label for="inputIndexNumber">Index Number<b style="color:red;">*</b>:</label> 
+															<input type="text" class="form-control" id="IndexNumber" name="inputIndexNumber" pattern="[0-9D]{9}" title="(User ID must Contain 8 digits and a Capital 'D')" onkeypress="return num_d(event)" value="<?php echo $indexNumberHolder; ?>" placeholder="Enter Index Number"> 
 														</div> 
 												</div> 
 		
 												<div class="row">
 													<div class="form-group col-md-6"> 
-														<label for="inputProgram"><b>Program:</b></label> 
-														<select id="inputProgram" name="inputProgram" class="form-control">
-															<option selected="">--Select Program--</option>
-															<option>Accountancy</option>
-															<option>Building Technology</option>
-															<option>Civil Engineering</option>
-															<option>Computer Science</option>
-															<option>Electrical / Electronics Engineering</option>
-															<option>Fashion Design & Textiles</option>
-															<option>Furniture Design & Production</option>
-															<option>Hotel, Catering & Institutional Management</option>
-															<option>Languages & Liberal Studies</option>
-															<option>Mathematics & Statistics</option>
-															<option>Marketing</option>
-															<option>Mechanical Engineering</option>
-															<option>Purchasing & Supply</option>
-															<option>Science Laboratory Technology</option>
-															<option>Secretaryship & Management Studies</option>
+														<label for="inputProgram"><b>Program<b style="color:red;">*</b>:</b></label> 
+														<select id="Program" name="inputProgram" class="form-control">
+
+														<?php
+															foreach($programs as $val) { echo "<option>".$val."</option>";};
+														?>
 														</select> 
 													</div>
+													
 													<div class="form-group col-md-6"> 
-														<label for="inputLevel"><b>Level:</b></label> 
-														<select id="inputLevel" name="inputLevel" class="form-control">
-															<option selected="">--Select Level--</option>
-															<option>100</option>
-															<option>200</option>
-															<option>300</option>
+														<label for="inputLevel"><b>Level<b style="color:red;">*</b>:</b></label> 
+														<select id="Level" name="inputLevel" class="form-control">
+														<?php
+														   foreach($levels as $val) { echo "<option>".$val."</option>";};
+														?>
 														</select>
 													</div> 
 												</div>
 		
 												<div class="row">
 													<div class="form-group col-md-6"> 
-														<label for="inputSession"><b>Session:</b></label> 
-														<select id="inputSession" name="inputSession" class="form-control">
-															<option selected="">--Select Session--</option>
-															<option>Full-time</option>
-															<option>Part-time</option>
-															<!-- <option>Weekend</option> -->
+														<label for="inputSession"><b>Session<b style="color:red;">*</b>:</b></label> 
+														<select id="Session" name="inputSession" class="form-control">
+														<?php
+															foreach($sessions as $val) { echo "<option>".$val."</option>";};
+														?>
 														</select>
 													</div>
 													<div class="form-group col-md-6"> 
-														<label for="inputFaculty"><b>Faculty:</b></label> 
-														<select id="inputFaculty" name="inputFaculty" class="form-control">
-															<option selected="">--Select Faculty--</option>
-															<option>Faculty of Applied Art</option>
-															<option>Faculty of Applied Science</option>
-															<option>Faculty of Built Environment</option>
-															<option>Faculty of Business</option>
-															<option>Faculty of Engineering</option>
+														<label for="inputFaculty"><b>Faculty<b style="color:red;">*</b>:</b></label> 
+														<select id="Faculty" name="inputFaculty" class="form-control">
+														<?php
+														   foreach($faculties as $val) { echo "<option>".$val."</option>";};
+														?>
 														</select>
 													</div> 
 												</div>
 		
 												<div class="text-center">
-													<button type="submit" class="btn btn-default" name="register_btn">Register</button>
+													<button type="submit" class="btn btn-default" value="Submit" name="register_btn">Register</button>
 												</div> 
 											</form>
 

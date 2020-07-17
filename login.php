@@ -97,6 +97,7 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
 
 	<!-- Classie --><!-- for toggle left push menu script -->
 	<script src="js/classie.js"></script>
+
 	<script>
 		var menuLeft = document.getElementById( 'cbp-spmenu-s1' ),
 			showLeftPush = document.getElementById( 'showLeftPush' ),

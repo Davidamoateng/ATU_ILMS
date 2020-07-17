@@ -1,5 +1,7 @@
 <?php 
-    include('functions.php'); 
+	include('functions.php'); 
+	//include('user_reg_functions.php');
+	
 
 	if (!isLoggedIn()) {
 		$_SESSION['msg'] = "Please log in first ...";
@@ -11,8 +13,10 @@
 		header('location: login.php');
 	}
 
-	$firstName = $_COOKIE["student_first_name"];
-	$lastName = $_COOKIE["student_last_name"];
+	$firstName = $_SESSION['user']['first_name'];
+	$lastName = $_SESSION['user']['last_name'];
+	$indexNumber = $_SESSION['user']['user_id'];
+
 	$otherNameStatus = "disabled";
 	$indexStatus = "disabled";
 	$firstNameHolder = "";
@@ -29,27 +33,27 @@
 
 	$sessions = array("--Select Session--","Full-time","Part-time");
 
-	$levels = array("--Select Session--","100","200","300");
+	$levels = array("--Select Level--","100","200","300");
 
 	if (isset($_POST["validate_btn"])) {
 
 		$enteredReceiptNumber = $_POST["inputReceiptNumber"];
-		$checkReceipt = "SELECT * FROM virtual_attachment_receipts_paid WHERE receipt_number='$enteredReceiptNumber'";
+		$checkReceipt = "SELECT * FROM virtual_attachment_receipts_paid WHERE receipt_number='$enteredReceiptNumber' AND index_number = '$indexNumber'";
 		$executeCheckReceipt = mysqli_query($db, $checkReceipt);
 		$getReceiptDetails = mysqli_num_rows($executeCheckReceipt);
 
 		if ($getReceiptDetails == 1) {
 
 			$otherNameStatus = "";
-			$firstNameHolder = $_COOKIE["student_first_name"];
-			$lastNameHolder = $_COOKIE["student_last_name"];
-			$indexNumberHolder = $_COOKIE["student_index_number"];
+			$firstNameHolder = $_SESSION['user']['first_name'];
+	        $lastNameHolder = $_SESSION['user']['last_name'];
+	        $indexNumberHolder = $_SESSION['user']['user_id'];
 			$indexStatus = "";
 			$submitStatus = "";
 
 		}else {
 
-			echo "<script> alert('Invalid Receipt Number..!') </script>";
+			echo "<script> alert('Error... Invalid Receipt Number..!') </script>";
 
 			$otherNameStatus = "disabled";
 			$indexStatus = "disabled";
@@ -62,30 +66,51 @@
 	}
 
 	if (isset($_POST["register_btn"])) {
-		if ($_POST["inputProgram"] != "" && $_POST["inputLevel"] != "" && $_POST["inputSession"] != "") {
-			
-			$otherName = $_POST["inputOtherName"];
+
+		    $otherName = $_POST["inputOtherName"];
 			$programSelected = $_POST["inputProgram"];
 			$levelSelected = $_POST["inputLevel"];
 			$sessionSelected = $_POST["inputSession"];
 			$indexNumber = $_POST["inputIndexNumber"];
 			$faculty = $_POST["inputFaculty"];
 
-			$checkUserExistence = "SELECT * FROM virtual_attachment_registration WHERE student_index_number = '$indexNumber' LIMIT 1";
-			$executeCheckExistence = mysqli_query($db, $checkUserExistence);
-			$check_user = mysqli_num_rows($executeCheckExistence);
+		if ($_POST["inputProgram"] != "" && $_POST["inputLevel"] != "" && $_POST["inputSession"] != "") {
+			
+			
 
-			if ($check_user == 1) {
-				echo "<script> alert('Sorry... You Have Registered Already') </script>";
+			$preventDoubleRegistration = "SELECT * FROM industrial_attachment_registration WHERE index_number = '$indexNumber' LIMIT 1";
+			$executeDoubleRegistration = mysqli_query($db, $preventDoubleRegistration);
+			$checkPrevention = mysqli_num_rows($executeDoubleRegistration);
+
+			if ($checkPrevention == 1) {
+
+				echo "<script> alert('Sorry... You have already registered for Industrial Attachment..!') </script>";
+
 			}else{
-				$insertDetailsCommand = "INSERT INTO virtual_attachment_registration (`student_first_name`, `student_last_name`, `other_name`, `student_index_number`, `program`, `level`, `session`, `faculty`, `date`)
-										VALUES ('$firstName', '$lastName', '$otherName', '$indexNumber', '$programSelected', '$levelSelected', '$sessionSelected', '$faculty', CURRENT_TIMESTAMP)";
-				if ($run_query = mysqli_query($db, $insertDetailsCommand)) {
-					echo "<script> alert('Details Have Been Submitted Successfully') </script>";
+
+				$checkUserExistence = "SELECT * FROM virtual_attachment_registration WHERE index_number = '$indexNumber' LIMIT 1";
+				$executeCheckExistence = mysqli_query($db, $checkUserExistence);
+				$check_user = mysqli_num_rows($executeCheckExistence);
+
+				if ($check_user == 1) {
+
+					echo "<script> alert('Sorry... You have already registered for Virtual Attachment..!') </script>";
+
 				}else{
-					echo "<script> alert('Details Not Submitted..!') </script>";
+					$insertDetailsCommand = "INSERT INTO virtual_attachment_registration (`first_name`, `last_name`, `other_name`, `index_number`, `program`, `level`, `session`, `faculty`, `date`)
+											VALUES ('$firstName', '$lastName', '$otherName', '$indexNumber', '$programSelected', '$levelSelected', '$sessionSelected', '$faculty', CURRENT_TIMESTAMP)";
+					if ($run_query = mysqli_query($db, $insertDetailsCommand)) {
+
+						echo "<script> alert('Congrats... You have been registered Successfully for Virtual Attachment') </script>";
+
+					}else{
+
+						echo "<script> alert('Sorry... Your registration failed..!') </script>";
+
+					}
 				}
-			}
+
+            }
 		}
 	}
 ?>
@@ -361,11 +386,11 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
 										<form  action="" method="POST">
 											<div class="row">
 												<div class="form-group col-md-6 col-lg-6" style="margin-top: 48px;"> 
-													<label for="InputFirstName">First Name:</label> 
+													<label for="InputFirstName">First Name<b style="color:red;">*</b>:</label> 
 													<input type="text" class="form-control" id="inputFirstName" name="inputFirstName" disabled value="<?php echo $firstNameHolder; ?>" placeholder="Enter First Name" required> 
 												</div>
 												<div class="form-group col-md-6 col-lg-6"> 
-													<label for="InputLastName">Last Name:</label> 
+													<label for="InputLastName">Last Name<b style="color:red;">*</b>:</label> 
 													<input type="text" class="form-control" id="inputLastName" name="inputLastName" disabled value="<?php echo $lastNameHolder; ?>" placeholder="Enter Last Name" required> 
 												</div> 
 											</div> 
@@ -373,18 +398,18 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
 											<div class="row">
 													<div class="form-group col-md-6 col-lg-6"> 
 														<label for="InputOtherNames"><b>Other Name(s):</b></label> 
-														<input type="text" class="form-control" id="inputOtherName" name="inputOtherName" <?php echo $otherNameStatus; ?> placeholder="Enter Other Name(s)" onkeypress="return alphabet_space(event)"> 
+														<input type="text" class="form-control" id="inputOtherName" onkeypress="return alphabet(event)" name="inputOtherName" <?php echo $otherNameStatus; ?> placeholder="Enter Other Name(s)" onkeypress="return alphabet(event)"> 
 													</div>
 													<div class="form-group col-md-6 col-lg-6"> 
-														<label for="InputIndexNumber">Index Number:</label> 
-														<input type="text" class="form-control" id="inputIndexNumber" name="inputIndexNumber" pattern="[0-9D]{9}" title="(User ID must Contain 8 digits and a Capital 'D')" <?php echo $indexStatus; ?> value="<?php echo $indexNumberHolder; ?>" placeholder="Enter Index Number" onkeypress="return num_d(event)" required> 
+														<label for="InputIndexNumber">Index Number<b style="color:red;">*</b>:</label> 
+														<input type="text" class="form-control" id="inputIndexNumber" pattern="[0-9D]{9}" title="(User ID must Contain 8 digits and a Capital 'D')" onkeypress="return num_d(event)" name="inputIndexNumber" pattern="[0-9D]{9}" title="(User ID must Contain 8 digits and a Capital 'D')" <?php echo $indexStatus; ?> value="<?php echo $indexNumberHolder; ?>" placeholder="Enter Index Number" onkeypress="return num_d(event)" required> 
 													</div> 
 											</div> 
 
 											<div class="row">
 
 												<div class="form-group col-md-6 col-lg-6"> 
-													<label for="inputProgram"><b>Program:</b></label> 
+													<label for="inputProgram"><b>Program<b style="color:red;">*</b>:</b></label> 
 													<select class="form-control" id="inputProgram" name="inputProgram" required>
 														<?php 
 														foreach($programs as $val) {echo "<option>".$val."</option>";};
@@ -393,7 +418,7 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
 												</div>
 
 												<div class="form-group col-md-6 col-lg-6"> 
-													<label for="inputLevel"><b>Level:</b></label> 
+													<label for="inputLevel"><b>Level<b style="color:red;">*</b>:</b></label> 
 													<select class="form-control" id="inputLevel" name="inputLevel" required>
 														<?php 
 														foreach($levels as $val) {echo "<option>".$val."</option>";};
@@ -404,7 +429,7 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
 
 											<div class="row">
 												<div class="form-group col-md-6 col-lg-6"> 
-													<label for="inputSession"><b>Session:</b></label> 
+													<label for="inputSession"><b>Session<b style="color:red;">*</b>:</b></label> 
 													<select class="form-control" id="inputSession" name="inputSession" required>
 													    <?php 
 														foreach($sessions as $val) {echo "<option>".$val."</option>";};
@@ -412,7 +437,7 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
 													</select>
 												</div>
 												<div class="form-group col-md-6 col-lg-6"> 
-													<label for="inputFaculty"><b>Faculty:</b></label> 
+													<label for="inputFaculty"><b>Faculty<b style="color:red;">*</b>:</b></label> 
 													<select class="form-control" id="inputFaculty" name="inputFaculty" required>
 													    <?php 
 														  foreach($faculties as $val) {echo "<option>".$val."</option>";};

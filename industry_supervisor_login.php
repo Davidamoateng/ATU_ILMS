@@ -10,6 +10,32 @@
 		$_SESSION['msg'] = "Please log in first ...";
 		header('location: login.php');
 	}
+
+	$studentFirstName = $_SESSION['user']['first_name'];
+	$studentLastName = $_SESSION['user']['last_name'];
+
+	if (isset($_POST["login_btn"])) {
+		if ($_POST["inputPassword"] != "") {
+
+			$supervisors_password = $_POST["inputPassword"];
+			$supervisor_login_details = "SELECT * FROM supervisors_login WHERE `password` = '$supervisors_password' AND `status` = 'industry'";
+			$execute_supervisors_login = mysqli_query($db, $supervisor_login_details);
+			$check_query = mysqli_num_rows($execute_supervisors_login);
+
+			if ($check_query == 1) {
+				
+				header("Location: industry_supervisor_grade.php");
+				echo "<script>alert('Login Successful')</script>";
+
+			}else{
+				echo "<script>alert('Error... Incorrect Supervisor Password')</script>";
+			}
+
+		}
+	}
+
+
+
 ?>
 
 <!DOCTYPE HTML>
@@ -265,9 +291,10 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
 												 <h3 class="panel-title">Industry-Based Supervisor Login</h3> 
 											 </div> 
 											 <div class="panel-body sup-login-panel"> 
-												
+
+												<!-- /////////////////////////////////////////////////////////////////// -->
 												<div class="form-body sup-login-form  widget-shadow">
-													<form class="form-horizontal" action="industry_supervisor_grade.php" method="post"> 
+													<form class="form-horizontal" action="" method="post"> 
 														<div class="form-group"> 
 															<label for="inputPassword" class="control-label">PASSWORD</label> 
 														</div> 
@@ -275,15 +302,16 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
 														<div class="form-group"> 
 														
 															<div class=""> 
-																<input type="password" class="form-control sup-login-input" id="Password" placeholder="Enter Password" required> 
+																<input type="password" class="form-control sup-login-input" name="inputPassword" id="Password" placeholder="Enter Password" required> 
 															</div> 
 														</div> 
 													 
 														<div class=""> 
-															<button type="submit" class="btn btn-default"><i class="fa fa-sign-in"></i> Login</button> 
+															<button type="submit" class="btn btn-default" value="Login" name="login_btn"><i class="fa fa-sign-in"></i> Login</button> 
 														</div> 
 													</form> 
 												</div>
+												<!-- /////////////////////////////////////////////////////////////////// -->
 												
 											 </div> 
 										 </div>

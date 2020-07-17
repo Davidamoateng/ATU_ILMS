@@ -15,13 +15,92 @@
 	   $update_btn_status = "";
 	   $save_btn_status = "";
 
-	   $firstName = $_COOKIE["first_name"];
-	   $lastName = $_COOKIE["last_name"];
+	   $studentFirstName = $_SESSION['user']['first_name'];
+	   $studentLastName = $_SESSION['user']['last_name'];
 
 	   
+	   $student_full_name = $studentFirstName." ".$studentLastName;
+	   $indexNumber = $_SESSION['user']['user_id'];
 
-	   
+			$check_content_existence = "SELECT * FROM week1_table WHERE index_number = '$indexNumber'";
+			$check_existence_query = mysqli_query($db, $check_content_existence);
+			$check_query_presence = mysqli_num_rows($check_existence_query);
+
+	   if ($check_query_presence == 1) {
+
+		   $edit_btn_status = "enabled";
+		   $save_btn_status = "disabled";
+
+	   }else{
+
+		   $edit_btn_status = "disabled";
+		   $save_btn_status = "enabled";
+
+	   }
+
+	   //////////////////////////SAVE BUTTON START/////////////////////////////////////////////
+	   if (isset($_POST["save_btn"])) {
+		
+		   $monday_activity = $_POST["job_assigned_1"];
+		   $tuesday_activity = $_POST["job_assigned_2"];
+		   $wednesday_activity = $_POST["job_assigned_3"];
+		   $thursday_activity = $_POST["job_assigned_4"];
+		   $friday_activity = $_POST["job_assigned_5"];
+
+		   if ($monday_activity != "" && $tuesday_activity != "" && $wednesday_activity != "" && $thursday_activity != "" && $friday_activity != "") {
+			  
+				$check_record_existence = "SELECT * FROM week1_table WHERE index_number = '$indexNumber'";
+				$record_existence_query = mysqli_query($db, $check_record_existence);
+				$record_query_presence = mysqli_num_rows($record_existence_query);
+
+				if ($check_query_presence ==1 ) {
+					echo "<script>alert('Error... Record already exists..!')</script>";
+				}else {
+					
+					$insert_details_command = "INSERT INTO week1_table (`id`, `username`, `index_number`, `date`, `monday_activities`, `tuesday_activities`, `wednesday_activities`, `thursday_activities`, `friday_activities`) 
+					VALUES (NULL, '$student_full_name', '$indexNumber', CURRENT_TIMESTAMP, '$monday_activity', '$tuesday_activity', '$wednesday_activity', '$thursday_activity', '$friday_activity')";
+					$execute_insert_query = mysqli_query($db, $insert_details_command);
+					
+					echo "<script>alert('Your record has been saved successfully')</script>";
+					//header('location: e_logbook_2.php');
+                    
+				}
+
+		   }else{
+			   echo "<script>alert('Please fill all input fields ...')</script>";
+		   }
+	   }
+	   /////////////////////////////////SAVE BUTTON END/////////////////////////////////////////
+
+
+	   //////////////////////////EDIT BUTTON START/////////////////////////////////////////////
+	   if (isset($_POST["edit_btn"])) {
+
+		   $monday_activity = $_POST["job_assigned_1"];
+		   $tuesday_activity = $_POST["job_assigned_2"];
+		   $wednesday_activity = $_POST["job_assigned_3"];
+		   $thursday_activity = $_POST["job_assigned_4"];
+		   $friday_activity = $_POST["job_assigned_5"];
+
+		   if ($monday_activity != "" && $tuesday_activity != "" && $wednesday_activity != "" && $thursday_activity != "" && $friday_activity != "") {
+			
+			 $update_details_command = "UPDATE week1_table SET monday_activities = '$monday_activity', tuesday_activities = '$tuesday_activity', wednesday_activities = '$wednesday_activity', thursday_activities = '$thursday_activity', friday_activities = '$friday_activity' WHERE `index_number`='$indexNumber'";
+			 $execute_update_query = mysqli_query($db, $update_details_command);
+
+			 
+
+			 echo "<script>alert('Your record has been updated successfully ...')</script>";
+			 //header('location: e_logbook_2.php');
+
+		   }else{
+			   echo "<script>alert('You need to fill all input fields ...')</script>";
+		   }
+	   }
+	   /////////////////////////////////EDIT BUTTON END////////////////////////////////////////////////
+
 	/////////// E-Logbook Code Ends Here//////////////////////////////////////////////////////////////////////
+
+	
 ?>
 
 <!DOCTYPE HTML>
@@ -231,7 +310,7 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
 										<span> 
 											<?php 
 											  echo $_SESSION['user']['first_name'];
-											  echo ' '. $_SESSION['user']['last_name']; 
+											  echo ' '.$_SESSION['user']['last_name']; 
 											?> 
 										 </span>
 									<?php endif ?>
@@ -296,7 +375,7 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
 														</div>
 														<hr>
 														
-														<form action="" method="POST">
+														<form action="" method="post">
 
 															 <!-- E-logbook Table -->
 																<div class="row">
@@ -309,36 +388,61 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
 																					</tr>
 																				</thead>
 																				<tbody>
-											    										<tr>
-																						<th scope="row" class="e-logbook-th" style="padding-top: 22px;">Monday</th>
-																						<td>
-																							<textarea name="job_assigned_1" class="form-control"></textarea>
-																						</td>                                
-																					</tr>
-																					<tr>
-																						<th scope="row" class="e-logbook-table" style="padding-top: 22px;">Teusday</th>
-																						<td>
-																							<textarea name="job_assigned_1" class="form-control"></textarea>
-																						</td>                                
-																					</tr>
-																					<tr>
-																						<th scope="row" class="e-logbook-table" style="padding-top: 22px;">Wednesday</th>
-																						<td>
-																							<textarea name="job_assigned_1" class="form-control"></textarea>
-																						</td>                                
-																					</tr>
-																					<tr>
-																						<th scope="row" class="e-logbook-table" style="padding-top: 22px;">Thursday</th>
-																						<td>
-																							<textarea name="job_assigned_1" class="form-control"></textarea>
-																						</td>                                
-																					</tr>
-																					<tr>
-																						<th scope="row" class="e-logbook-table" style="padding-top: 22px;">Friday</th>
-																						<td>
-																							<textarea name="job_assigned_1" class="form-control"></textarea>
-																						</td>                                
-																					</tr>
+																				
+																				<?php 
+																				
+																				   $get_previous_data = "SELECT * FROM week1_table WHERE index_number='$indexNumber'";
+                                                                                   $execute_get_query = mysqli_query($db, $get_previous_data);
+																				   $get_data = mysqli_fetch_assoc($execute_get_query);
+																				   
+
+																				   $monday_activity_holder = $get_data["monday_activities"];
+																				   $tuesday_activity_holder = $get_data["tuesday_activities"];
+																				   $wednesday_activity_holder = $get_data["wednesday_activities"];
+																				   $thursday_activity_holder = $get_data["thursday_activities"];
+																				   $friday_activity_holder = $get_data["friday_activities"];
+
+
+
+																				
+
+											    									echo "<tr>";
+																					echo "<th scope='row' class='e-logbook-th' style='padding-top: 22px;'>"."Monday"."</th>";
+																				    echo "<td>";
+																					     echo "<textarea name='job_assigned_1' class='form-control' onkeypress='return alpha_numeric_space(event)' required>$monday_activity_holder</textarea>";
+																					echo "</td>";                             
+																					echo "</tr>";
+
+																					echo "<tr>";
+																					echo "<th scope='row' class='e-logbook-table' style='padding-top: 22px;'>"."Tuesday"."</th>";
+																					echo "<td>";
+																					     echo "<textarea name='job_assigned_2' class='form-control' onkeypress='return alpha_numeric_space(event)' required>$tuesday_activity_holder</textarea>";
+																					echo "</td>";                                
+																					echo "</tr>";
+
+																					echo "<tr>";
+																					echo "<th scope='row' class='e-logbook-table' style='padding-top: 22px;'>"."Wednesday"."</th>";
+																					echo "<td>";
+																					     echo "<textarea name='job_assigned_3' class='form-control' onkeypress='return alpha_numeric_space(event)' required>$wednesday_activity_holder</textarea>";
+																					echo "</td>";                                
+																					echo "</tr>";
+
+																					echo "<tr>";
+																					echo "<th scope='row' class='e-logbook-table' style='padding-top: 22px;'>"."Thursday"."</th>";
+																					echo "<td>";
+																					     echo "<textarea name='job_assigned_4' class='form-control' onkeypress='return alpha_numeric_space(event)' required>$thursday_activity_holder</textarea>";
+																					echo "</td>";                                
+																					echo "</tr>";
+
+																					echo "<tr>";
+																					echo "<th scope='row' class='e-logbook-table' style='padding-top: 22px;'>"."Friday"."</th>";
+																					echo "<td>";
+																						echo "<textarea name='job_assigned_5' class='form-control' onkeypress='return alpha_numeric_space(event)' required>$friday_activity_holder</textarea>";
+																					echo "</td>";                                
+																					echo "</tr>";
+
+																					?>
+
 																				</tbody>
 																			</table>
 																   </div>    
@@ -349,14 +453,17 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
 
 													
 														<div class="text-center">
-															<button type="submit" class="btn btn-primary disabled">
-																<i class="fa fa-edit"></i>
+
+															<button type="submit" value="Edit" name="edit_btn" class="btn btn-primary" <?php echo $edit_btn_status; ?> >
+															  <i class="fa fa-edit"></i>
 																Edit
 															</button>
-															<button type="submit" class="btn btn-success">
+																
+															<button type="submit" value="Save" name="save_btn" class="btn btn-success" <?php echo $save_btn_status; ?> >
 																<i class="fa fa-save"></i>
 																Save
 															</button>
+
 														</div> 
 													</form> 
 												</div>	

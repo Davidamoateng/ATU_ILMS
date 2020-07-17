@@ -10,11 +10,67 @@
 		$_SESSION['msg'] = "Please log in first ...";
 		header('location: login.php');
 	}
-?>
 
+	$studentFirstName = $_SESSION['user']['first_name'];
+	$studentLastName = $_SESSION['user']['last_name'];
+	$indexNumber = $_SESSION['user']['user_id'];
+    
+	$student_full_name = $studentFirstName." ".$studentLastName;
+	
+	if (isset($_POST["submit_btn"])) {
+
+		$introduction = $_POST["inputIntroduction"];
+		$objective = $_POST["inputObjective"];
+
+		$brief_history = $_POST["inputBriefHistory"];
+		$vision_mission = $_POST["inputVisionMission"];
+		$department = $_POST["inputDepartment"];
+		$major_activities = $_POST["inputMajorActivities"];
+
+		$description = $_POST["inputDescription"];
+		$detailed_account = $_POST["inputDetailedAccount"];
+		$general_observation = $_POST["inputGeneralObservation"];
+
+		$knowledge = $_POST["inputKnowledge"];
+		$contribution = $_POST["inputContribution"];
+		$observation = $_POST["inputObservation"];
+		 
+		$conclusion = $_POST["inputConclusion"];
+		$recommendation = $_POST["inputRecommendation"];
+
+
+		if ($_POST["inputIntroduction"] != "" && $_POST["inputObjective"] != "" && $_POST["inputBriefHistory"] != "" && $_POST["inputVisionMission"] != "" && $_POST["inputDepartment"] != "" && $_POST["inputMajorActivities"] != "" && $_POST["inputDescription"] != "" && $_POST["inputDetailedAccount"] != "" && $_POST["inputGeneralObservation"] != "" && $_POST["inputKnowledge"] != "" && $_POST["inputContribution"] != "" && $_POST["inputObservation"] != "" && $_POST["inputConclusion"] != "" && $_POST["inputRecommendation"] != "") {
+				
+			    $check_report_existence = "SELECT * FROM attachment_reports WHERE index_number = '$indexNumber'";
+				$report_existence_query = mysqli_query($db, $check_report_existence);
+				$report_query_presence = mysqli_num_rows($report_existence_query);
+
+				if ($report_query_presence == 1) {
+
+					echo "<script>alert('Error... You have already submitted your report..!')</script>";
+					
+				} else {
+					
+					$insert_report_command = "INSERT INTO attachment_reports (`id`, `username`, `index_number`, `date`, `introduction`, `objective`, `brief_history`, `vision_mission`, `department`, `major_activities`, `description`, `detailed_account`, `general_observation`, `knowledge`, `contribution`, `observation`, `conclusion`, `recommendation`) 
+					VALUES (NULL, '$student_full_name', '$indexNumber', CURRENT_TIMESTAMP, '$introduction', '$objective', '$brief_history', '$vision_mission', '$department', '$major_activities', '$description', '$detailed_account', '$general_observation', '$knowledge', '$contribution', '$observation', '$conclusion', '$recommendation')";
+					$execute_insert_query = mysqli_query($db, $insert_report_command);
+					
+					echo "<script>alert('Your report has been submitted successfully ...')</script>";
+					
+				}
+				
+
+		}
+
+	}
+	//var_dump($student_full_name, $indexNumber);
+
+?>
+ 
 <!DOCTYPE HTML>
 <html>
 <head>
+
 <title>ATU ILMS | Submit Report</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -266,7 +322,10 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
 														Please fill the appropriate fields in the table below to write your
 														Industrial Attachment / Internship Report, click <b>"Submit"</b> after
 														filling the spaces to send your Report to the Liaison Office.
-
+														
+													</p>
+													<p>
+													  <b><u>Note:</u></b> Once report is submitted changes cannot be done.
 													</p>
 													<form action="#" method="post">
 															
@@ -276,19 +335,19 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
 																<!-- CHAPTER ONE -->
                                                                 <tr>
                                                                     <th scope="row" colspan="7" class="text-left"><b><u>CHAPTER ONE</u></b></th>
-                                                                </tr>
-
+																</tr>
+																
                                                                 <tr>
-																	<td scope="row" class="text-left" style="padding-top: 25px;"><b>A. Background / Introduction:</b></td>
+																	<td scope="row" class="text-left" style="padding-top: 25px;"><b>A. Background / Introduction<b style="color:red;">*</b>:</b></td>
 																	<td>
-																		<textarea name="Introduction" class="form-control" rows="3" cols="55" required></textarea>
+																		<textarea name="inputIntroduction" class="form-control" onkeypress="return alpha_numeric_space(event)" rows="3" cols="55" required></textarea>
 																	</td>  
 																</tr>
 																
 																<tr>
-																	<td scope="row" class="text-left" style="padding-top: 25px;"><b>B. Objective of the Industrial Attachment:</b></td>
+																	<td scope="row" class="text-left" style="padding-top: 25px;"><b>B. Objective of the Industrial Attachment<b style="color:red;">*</b>:</b></td>
 																	<td>
-																		<textarea name="Introduction" class="form-control" rows="3" cols="55" required></textarea>
+																		<textarea name="inputObjective" class="form-control" onkeypress="return alpha_numeric_space(event)" rows="3" cols="55" required></textarea>
 																	</td>  
 																</tr>
 																
@@ -297,30 +356,30 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
 																</tr>
 																
 																<tr>
-																	<td scope="row" class="text-left" style="padding-top: 25px;">1<b>.</b> Brief History<b>:</b></td>
+																	<td scope="row" class="text-left" style="padding-top: 25px;">1<b>.</b> Brief History<b><b style="color:red;">*</b>:</b></td>
 																	<td>
-																		<textarea name="Introduction" class="form-control" rows="3" cols="55" required></textarea>
+																		<textarea name="inputBriefHistory" class="form-control" onkeypress="return alpha_numeric_space(event)" rows="3" cols="55" required></textarea>
 																	</td>  
 																</tr>
 
 																<tr>
-																	<td scope="row" class="text-left" style="padding-top: 25px;">2<b>.</b> Vision / Mission Statement<b>:</b></td>
+																	<td scope="row" class="text-left" style="padding-top: 25px;">2<b>.</b> Vision / Mission Statement<b><b style="color:red;">*</b>:</b></td>
 																	<td>
-																		<textarea name="Introduction" class="form-control" rows="3" cols="55" required></textarea>
+																		<textarea name="inputVisionMission" class="form-control" onkeypress="return alpha_numeric_space(event)" rows="3" cols="55" required></textarea>
 																	</td>  
 																</tr>
 
 																<tr>
-																	<td scope="row" class="text-left" style="padding-top: 25px;">3<b>.</b> Department / Unit / Section<b>:</b></td>
+																	<td scope="row" class="text-left" style="padding-top: 25px;">3<b>.</b> Department / Unit / Section<b><b style="color:red;">*</b>:</b></td>
 																	<td>
-																		<textarea name="Introduction" class="form-control" rows="3" cols="55" required></textarea>
+																		<textarea name="inputDepartment" class="form-control" onkeypress="return alpha_numeric_space(event)" rows="3" cols="55" required></textarea>
 																	</td>  
 																</tr>
 
 																<tr>
-																	<td scope="row" class="text-left" style="padding-top: 25px;">4<b>.</b> Major Activities<b>:</b></td>
+																	<td scope="row" class="text-left" style="padding-top: 25px;">4<b>.</b> Major Activities<b><b style="color:red;">*</b>:</b></td>
 																	<td>
-																		<textarea name="Introduction" class="form-control" rows="3" cols="55" required></textarea>
+																		<textarea name="inputMajorActivities" class="form-control" onkeypress="return alpha_numeric_space(event)" rows="3" cols="55" required></textarea>
 																	</td>  
 																</tr>
 
@@ -330,23 +389,23 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
 																</tr>
 																
 																<tr>
-																	<td scope="row" class="text-left" style="padding-top: 15px;"><b>A.</b> Description of the nature of  work at the<br> department  / unit /  section you were assigned:</td>
+																	<td scope="row" class="text-left" style="padding-top: 15px;"><b>A.</b> Description of the nature of  work at the<br> department  / unit /  section you were assigned<b style="color:red;">*</b>:</td>
 																	<td>
-																		<textarea name="Introduction" class="form-control" rows="3" cols="55" required></textarea>
+																		<textarea name="inputDescription" class="form-control" onkeypress="return alpha_numeric_space(event)" rows="3" cols="55" required></textarea>
+																	</td>  
+																</tr>
+																
+																<tr>
+																	<td scope="row" class="text-left" style="padding-top: 20px;"><b>B.</b> Detailed account of work performed / trained<b style="color:red;">*</b>:</td>
+																	<td>
+																		<textarea name="inputDetailedAccount" class="form-control" onkeypress="return alpha_numeric_space(event)" rows="3" cols="55" required></textarea>
 																	</td>  
 																</tr>
 
 																<tr>
-																	<td scope="row" class="text-left" style="padding-top: 20px;"><b>B.</b> Detailed account of work performed / trained:</td>
+																	<td scope="row" class="text-left" style="padding-top: 15px;"><b>C.</b> General Observation (new knowledge / skills<br> acquired)<b style="color:red;">*</b>:</td>
 																	<td>
-																		<textarea name="Introduction" class="form-control" rows="3" cols="55" required></textarea>
-																	</td>  
-																</tr>
-
-																<tr>
-																	<td scope="row" class="text-left" style="padding-top: 15px;"><b>C.</b> General Observation (new knowledge / skills<br> acquired):</td>
-																	<td>
-																		<textarea name="Introduction" class="form-control" rows="3" cols="55" required></textarea>
+																		<textarea name="inputGeneralObservation" class="form-control" onkeypress="return alpha_numeric_space(event)" rows="3" cols="55" required></textarea>
 																	</td>  
 																</tr>
 
@@ -356,23 +415,23 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
 																</tr>
 
 																<tr>
-																	<td scope="row" class="text-left" style="padding-top: 15px;"><b>A.</b> New knowledge / skills and challenges<br> encountered:</td>
+																	<td scope="row" class="text-left" style="padding-top: 15px;"><b>A.</b> New knowledge / skills and challenges<br> encountered<b style="color:red;">*</b>:</td>
 																	<td>
-																		<textarea name="Introduction" class="form-control" rows="3" cols="55" required></textarea>
+																		<textarea name="inputKnowledge" class="form-control" onkeypress="return alpha_numeric_space(event)" rows="3" cols="55" required></textarea>
 																	</td>  
 																</tr>
 
 																<tr>
-																	<td scope="row" class="text-left" style="padding-top: 15px;"><b>B.</b> Your contribution to improve the organization<br> (value addition):</td>
+																	<td scope="row" class="text-left" style="padding-top: 15px;"><b>B.</b> Your contribution to improve the organization<br> (value addition)<b style="color:red;">*</b>:</td>
 																	<td>
-																		<textarea name="Introduction" class="form-control" rows="3" cols="55" required></textarea>
+																		<textarea name="inputContribution" class="form-control" onkeypress="return alpha_numeric_space(event)" rows="3" cols="55" required></textarea>
 																	</td>  
 																</tr>
 
 																<tr>
-																	<td scope="row" class="text-left" style="padding-top: 20px;"><b>C.</b> Your General Observation:</td>
+																	<td scope="row" class="text-left" style="padding-top: 20px;"><b>C.</b> Your General Observation<b style="color:red;">*</b>:</td>
 																	<td>
-																		<textarea name="Introduction" class="form-control" rows="3" cols="55" required></textarea>
+																		<textarea name="inputObservation" class="form-control" onkeypress="return alpha_numeric_space(event)" rows="3" cols="55" required></textarea>
 																	</td>  
 																</tr>
 
@@ -382,27 +441,27 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
 																</tr>
 
 																<tr>
-																	<td scope="row" class="text-left" style="padding-top: 20px;"><b>A.</b> Conclusion:</td>
+																	<td scope="row" class="text-left" style="padding-top: 20px;"><b>A.</b> Conclusion<b style="color:red;">*</b>:</td>
 																	<td>
-																		<textarea name="Introduction" class="form-control" rows="3" cols="55" required></textarea>
+																		<textarea name="inputConclusion" class="form-control" onkeypress="return alpha_numeric_space(event)" rows="3" cols="55" required></textarea>
 																	</td>  
 																</tr>
-
+																
 																<tr>
-																	<td scope="row" class="text-left" style="padding-top: 20px;"><b>B.</b> Recommendation:</td>
+																	<td scope="row" class="text-left" style="padding-top: 20px;"><b>B.</b> Recommendation<b style="color:red;">*</b>:</td>
 																	<td>
-																		<textarea name="Introduction" class="form-control" rows="3" cols="55" required></textarea>
+																		<textarea name="inputRecommendation" class="form-control" onkeypress="return alpha_numeric_space(event)" rows="3" cols="55" required></textarea>
 																	</td>  
 																</tr>
                                   
                                                             </tbody> 
                                                         </table>
 														<div class="text-center">
-															<button type="submit" class="btn btn-default disabled">
+															<!-- <button type="submit" class="btn btn-default disabled">
 																<i class="fa fa-edit"></i>
 																Edit
-															</button>
-															<button type="submit" class="btn btn-primary">
+															</button> -->
+															<button type="submit" class="btn btn-primary" name="submit_btn">
 																<i class="fa fa-upload"></i>
 																Submit
 															</button>

@@ -10,6 +10,76 @@
 	  $_SESSION['msg'] = "Please log in first ...";
 	  header('location: ../login.php');
   }
+
+  
+  $mysql_query_1 = "SELECT * FROM students_assumption";
+
+  if (isset($_POST["search_btn"])) {
+
+	  $search_by = $_POST["inputFilterBy"];
+	  $search_term = $_POST["inputSearch"];
+	  
+	  if ($search_by !="" && $search_term != "") {
+		  
+		  switch ($search_by) {
+
+			  case '--FilterBy--':
+
+				  $mysql_query_1 = "SELECT * FROM students_assumption";
+				  break;
+
+			case 'First Name':
+				
+				$mysql_query_1 = "SELECT * FROM students_assumption WHERE first_name LIKE '%$search_term%'";
+				break;
+
+			case 'Last Name':
+				
+				$mysql_query_1 = "SELECT * FROM students_assumption WHERE last_name LIKE '%$search_term%'";
+				break;
+
+			case 'Index Number':
+				
+				$mysql_query_1 = "SELECT * FROM students_assumption WHERE index_number LIKE '%$search_term%'";
+				break;
+
+			case 'Programme':
+				
+				$mysql_query_1 = "SELECT * FROM students_assumption WHERE program LIKE '%$search_term%'";
+				break;
+
+			case 'Level':
+				
+				$mysql_query_1 = "SELECT * FROM students_assumption WHERE `level` LIKE '%$search_term%'";
+				break;
+
+			case 'Session':
+				
+				$mysql_query_1 = "SELECT * FROM students_assumption WHERE `session` LIKE '%$search_term%'";
+				break;
+
+			case 'Region':
+				
+				$mysql_query_1 = "SELECT * FROM students_assumption WHERE `company_region` LIKE '%$search_term%'";
+				break;
+
+			case 'Company':
+				
+				$mysql_query_1 = "SELECT * FROM students_assumption WHERE `company_name` LIKE '%$search_term%'";
+				break;
+			  
+			default:
+
+			    $mysql_query_1 = "SELECT * FROM students_assumption";
+			    break;
+		  }
+	  }
+
+  }
+
+
+
+
 ?>
 
 <!DOCTYPE HTML>
@@ -171,7 +241,7 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
 
 			  <hr class="sidebar-divider">
 
-			  <li>
+			  <!-- <li>
 				<a href="view_student_logbooks.php">
 					<i class="fa fa-book"></i> 
 					<span>View Student Logbook</span>
@@ -186,6 +256,15 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
 					<span>View Student Reports</span>
 				</a>
 			</li>	
+
+			  <hr class="sidebar-divider"> -->
+
+			  <li class="treeview">
+				<a href="add_admin.php">
+				 <i class="fa fa-plus"></i>
+				 <span>Add New Admin</span>
+				</a>
+			  </li>
 
 			  <hr class="sidebar-divider">
 
@@ -282,27 +361,34 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
 										<div class="form-body widget_shadow_panel">
 
 											<div class="row">
-												<!-- Filter Box -->
-											<div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">  
-												<select id="InputLevel" class="form-control">
-													<option selected=""><b>--FilterBy--</b></option>
-													<option>First Name</option>
-													<option>Last Name</option>
-													<option>Index Number</option>
-													<option>Programme</option>
-													<option>Level</option>
-												</select>
-											</div> 
-											<!--// Filter Box -->
 
-											<!-- Search Box -->
-											<form class="form-inline col-xs-9 col-sm-9 col-md-9 col-lg-9" style="padding-left: 324px;"> 
-												<div class="form-group"> 
-													<input type="search" class="form-control" placeholder="Search term ..." aria-label="Search" required> 
-												</div> 
-												<button type="submit" class="btn btn-default btn-sm">Search</button> 
-											</form>
-											<!--// Search Box -->
+											  <form action="" method="post">
+												    <!-- Filter Box -->
+													<div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">  
+														<select id="InputLevel" class="form-control" name="inputFilterBy">
+															<option selected=""><b>--FilterBy--</b></option>
+															<option>First Name</option>
+															<option>Last Name</option>
+															<option>Index Number</option>
+															<option>Programme</option>
+															<option>Level</option>
+															<option>Session</option>
+															<option>Region</option>
+															<option>Company</option>
+														</select>
+													</div> 
+													<!--// Filter Box -->
+
+													<!-- Search Box -->
+													<div class="form-inline col-xs-9 col-sm-9 col-md-9 col-lg-9" style="padding-left: 324px;"> 
+														<div class="form-group"> 
+															<input type="search" class="form-control" name="inputSearch" placeholder="Search term ..." aria-label="Search" required> 
+														</div> 
+														<button type="submit" class="btn btn-default btn-sm" name="search_btn">Search</button> 
+													</div>
+													<!--// Search Box -->
+											  </form>
+
 											</div>
 
 											<div class="hr2"></div>
@@ -310,171 +396,51 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
 											<div class="panel-body widget-shadow" style="overflow-x: auto">
 												<!-- TABLE STARTS HERE -->
 												<table class="table table-striped table-condensed" style="font-size: 15.1px;">
+
 													<thead>
 														<tr class="active" style="font-weight: bold;">
-															<th scope="col">Student Name</th>
-															<th scope="col">Index Number</th>
-															<th scope="col">Program</th>
-															<th scope="col">Level</th>
-															<th scope="col">Session</th>
-															<th scope="col">Supervisor Name</th>
-															<th scope="col">Supervisor Contact</th>
-															<th scope="col">Supervisor <br> Email</th>
-															<th scope="col">Company Name</th>
-															<th scope="col">Company Region</th>
-															<th scope="col">Company Address</th>
+															<th scope="col" style="text-align:center">Student Name</th>
+															<th scope="col" style="text-align:center">Index Number</th>
+															<th scope="col" style="text-align:center">Program</th>
+															<th scope="col" style="text-align:center">Level</th>
+															<th scope="col" style="text-align:center">Session</th>
+															<th scope="col" style="text-align:center">Supervisor Name</th>
+															<th scope="col" style="text-align:center">Supervisor Contact</th>
+															<th scope="col" style="text-align:center">Supervisor <br> Email</th>
+															<th scope="col" style="text-align:center">Company Name</th>
+															<th scope="col" style="text-align:center">Company Region</th>
+															<th scope="col" style="text-align:center">Company Address</th>
 														</tr>
 													</thead>
+
 													<tbody>
-														<tr>
-															<td>Wright Octopos</td>
-															<td>01173054D</td>
-															<td>Computer Science</td>
-															<td>300</td>
-															<td>Morning</td>
-															<td>Robert Anum</td>
-															<td>0234445546</td>
-															<td>robert@gmail.com</td>
-															<td>GRA</td>
-															<td>Greater Accra</td>
-															<td>Ministries</td>
-														</tr>
-														<tr>
-															<td>Wright Octopos</td>
-															<td>01173054D</td>
-															<td>Computer Science</td>
-															<td>300</td>
-															<td>Morning</td>
-															<td>Robert Anum</td>
-															<td>0234445546</td>
-															<td>robert@gmail.com</td>
-															<td>Persol Systems</td>
-															<td>Greater Accra</td>
-															<td>Ministries</td>
-														</tr>
-														<tr>
-															<td>Wright Octopos</td>
-															<td>01173054D</td>
-															<td>Computer Science</td>
-															<td>300</td>
-															<td>Morning</td>
-															<td>Robert Anum</td>
-															<td>0234445546</td>
-															<td>robert@gmail.com</td>
-															<td>GRA</td>
-															<td>Greater Accra</td>
-															<td>Ministries</td>
-														</tr>
-														<tr>
-															<td>Wright Octopos</td>
-															<td>01173054D</td>
-															<td>Computer Science</td>
-															<td>300</td>
-															<td>Morning</td>
-															<td>Robert Anum</td>
-															<td>0234445546</td>
-															<td>robert@gmail.com</td>
-															<td>Persol Systems</td>
-															<td>Greater Accra</td>
-															<td>Ministries</td>
-														</tr>
-														<tr>
-															<td>Wright Octopos</td>
-															<td>01173054D</td>
-															<td>Computer Science</td>
-															<td>300</td>
-															<td>Morning</td>
-															<td>Robert Anum</td>
-															<td>0234445546</td>
-															<td>robert@gmail.com</td>
-															<td>GRA</td>
-															<td>Greater Accra</td>
-															<td>Ministries</td>
-														</tr>
-														<tr>
-															<td>Wright Octopos</td>
-															<td>01173054D</td>
-															<td>Computer Science</td>
-															<td>300</td>
-															<td>Morning</td>
-															<td>Robert Anum</td>
-															<td>0234445546</td>
-															<td>robert@gmail.com</td>
-															<td>GRA</td>
-															<td>Greater Accra</td>
-															<td>Ministries</td>
-														</tr>
-														<tr>
-															<td>Wright Octopos</td>
-															<td>01173054D</td>
-															<td>Computer Science</td>
-															<td>300</td>
-															<td>Morning</td>
-															<td>Robert Anum</td>
-															<td>0234445546</td>
-															<td>robert@gmail.com</td>
-															<td>Persol Systems</td>
-															<td>Greater Accra</td>
-															<td>Ministries</td>
-														</tr>
-														<tr>
-															<td>Wright Octopos</td>
-															<td>01173054D</td>
-															<td>Computer Science</td>
-															<td>300</td>
-															<td>Morning</td>
-															<td>Robert Anum</td>
-															<td>0234445546</td>
-															<td>robert@gmail.com</td>
-															<td>Persol Systems</td>
-															<td>Greater Accra</td>
-															<td>Ministries</td>
-														</tr>
-														<tr>
-															<td>Wright Octopos</td>
-															<td>01173054D</td>
-															<td>Computer Science</td>
-															<td>300</td>
-															<td>Morning</td>
-															<td>Robert Anum</td>
-															<td>0234445546</td>
-															<td>robert@gmail.com</td>
-															<td>GRA</td>
-															<td>Greater Accra</td>
-															<td>Ministries</td>
-														</tr>
-														<tr>
-															<td>Wright Octopos</td>
-															<td>01173054D</td>
-															<td>Computer Science</td>
-															<td>300</td>
-															<td>Morning</td>
-															<td>Robert Anum</td>
-															<td>0234445546</td>
-															<td>robert@gmail.com</td>
-															<td>GRA</td>
-															<td>Greater Accra</td>
-															<td>Ministries</td>
-														</tr>
-														<tr>
-															<td>Wright Octopos</td>
-															<td>01173054D</td>
-															<td>Computer Science</td>
-															<td>300</td>
-															<td>Morning</td>
-															<td>Robert Anum</td>
-															<td>0234445546</td>
-															<td>robert@gmail.com</td>
-															<td>GRA</td>
-															<td>Greater Accra</td>
-															<td>Ministries</td>
-														</tr>
-
+														<?php
 														
+														// Get Students Assumption Data  //
+														$mysql_query_command_1 = $mysql_query_1;
+														$execute_result_query = mysqli_query($db, $mysql_query_command_1);
 
-														
-									
+														while ($row_set = mysqli_fetch_array($execute_result_query)) {
+
+															echo "<tr>";
+																	echo "<td style='text-align:center'>".$row_set["first_name"]."&nbsp;".$row_set["last_name"]."</td>";
+																	echo "<td style='text-align:center'>".$row_set["index_number"]."</td>";
+																	echo "<td style='text-align:center'>".$row_set["program"]."</td>";
+																	echo "<td style='text-align:center'>".$row_set["level"]."</td>";
+																	echo "<td style='text-align:center'>".$row_set["session"]."</td>";
+																	echo "<td style='text-align:center'>".$row_set["supervisor_name"]."</td>";
+																	echo "<td style='text-align:center'>".$row_set["supervisor_contact"]."</td>";
+																	echo "<td style='text-align:center'>".$row_set["supervisor_email"]."</td>";
+																	echo "<td style='text-align:center'>".$row_set["company_name"]."</td>";
+																	echo "<td style='text-align:center'>".$row_set["company_region"]."</td>";
+																	echo "<td style='text-align:center'>".$row_set["company_address"]."</td>";
+															echo "<tr>";
+															
+														}
+														    
+														?>
 													</tbody>
+
 												</table>
 												<!-- TABLE ENDS HERE -->
 											</div>

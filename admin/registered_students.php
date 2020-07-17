@@ -10,6 +10,69 @@
 	  $_SESSION['msg'] = "Please log in first ...";
 	  header('location: ../login.php');
   }
+
+  $mysql_query_1 = "SELECT * FROM virtual_attachment_registration";
+  $mysql_query_2 = "SELECT * FROM industrial_attachment_registration";
+
+  if (isset($_POST["search_btn"])) { 
+
+	$search_by = $_POST["inputFilterBy"];
+	$search_term = $_POST["inputSearch"];
+
+	if ($search_by != "" && $search_term != "") {
+		switch ($search_by) {
+			case '--FilterBy--':
+				
+				$mysql_query_1 = "SELECT * FROM virtual_attachment_registration";
+				$mysql_query_2 = "SELECT * FROM industrial_attachment_registration";
+				break;
+			
+			case 'First Name':
+				
+				$mysql_query_1 = "SELECT * FROM virtual_attachment_registration WHERE first_name LIKE '%$search_term%'";
+                $mysql_query_2 = "SELECT * FROM industrial_attachment_registration WHERE first_name LIKE '%$search_term%'";
+				break;
+
+			case 'Last Name':
+				
+				$mysql_query_1 = "SELECT * FROM virtual_attachment_registration WHERE last_name LIKE '%$search_term%'";
+				$mysql_query_2 = "SELECT * FROM industrial_attachment_registration WHERE last_name LIKE '%$search_term%'";
+				break;
+
+			case 'Index Number':
+				
+				$mysql_query_1 = "SELECT * FROM virtual_attachment_registration WHERE index_number LIKE '%$search_term%'";
+				$mysql_query_2 = "SELECT * FROM industrial_attachment_registration WHERE index_number LIKE '%$search_term%'";
+				break;
+
+			case 'Programme':
+				
+				$mysql_query_1 = "SELECT * FROM virtual_attachment_registration WHERE program LIKE '%$search_term%'";
+				$mysql_query_2 = "SELECT * FROM industrial_attachment_registration WHERE program LIKE '%$search_term%'";
+				break;
+				
+			case 'Level':
+				
+				$mysql_query_1 = "SELECT * FROM virtual_attachment_registration WHERE `level` LIKE '%$search_term%'";
+				$mysql_query_2 = "SELECT * FROM industrial_attachment_registration WHERE `level` LIKE '%$search_term%'";
+				break;
+
+			case 'Session':
+				
+				$mysql_query_1 = "SELECT * FROM virtual_attachment_registration WHERE `session` LIKE '%$search_term%'";
+				$mysql_query_2 = "SELECT * FROM industrial_attachment_registration WHERE `session` LIKE '%$search_term%'";
+				break;
+			
+			default:
+			    $mysql_query_1 = "SELECT * FROM virtual_attachment_registration";
+			    $mysql_query_2 = "SELECT * FROM industrial_attachment_registration";
+				break;
+		}
+	}
+
+
+  }
+ 
 ?>
 
 <!DOCTYPE HTML>
@@ -171,7 +234,7 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
 
 			  <hr class="sidebar-divider">
 
-			  <li>
+			  <!-- <li>
 				<a href="view_student_logbooks.php">
 					<i class="fa fa-book"></i> 
 					<span>View Student Logbook</span>
@@ -186,6 +249,15 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
 					<span>View Student Reports</span>
 				</a>
 			</li>	
+
+			  <hr class="sidebar-divider"> -->
+
+			  <li class="treeview">
+				<a href="add_admin.php">
+				 <i class="fa fa-plus"></i>
+				 <span>Add New Admin</span>
+				</a>
+			  </li>
 
 			  <hr class="sidebar-divider">
 
@@ -281,10 +353,11 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
 									 <div class="panel-body"> 
 										<div class="form-body widget_shadow_panel">
 
+										 <form action="" method="post">
 											<div class="row">
 												<!-- Filter Box -->
 											<div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">  
-												<select id="InputLevel" class="form-control">
+												<select id="FilterBy" class="form-control" name="inputFilterBy">
 													<option selected=""><b>--FilterBy--</b></option>
 													<option>First Name</option>
 													<option>Last Name</option>
@@ -297,14 +370,15 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
 											<!--// Filter Box -->
 
 											<!-- Search Box -->
-											<form class="form-inline col-xs-9 col-sm-9 col-md-9 col-lg-9" style="padding-left: 324px;"> 
+											<div class="form-inline col-xs-9 col-sm-9 col-md-9 col-lg-9" style="padding-left: 324px;"> 
 												<div class="form-group"> 
-													<input type="search" class="form-control" placeholder="Search term ..." aria-label="Search" required> 
+													<input type="search" class="form-control" name="inputSearch" placeholder="Search term ..." aria-label="Search" required> 
 												</div> 
-												<button type="submit" class="btn btn-default btn-sm">Search</button> 
-											</form>
+												<button type="submit" class="btn btn-default btn-sm" name="search_btn" >Search</button> 
+											</div>
 											<!--// Search Box -->
 											</div>
+										 </form>
 
 											<div class="hr2"></div>
 
@@ -313,169 +387,56 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
 												<table class="table table-striped table-condensed">
 													<thead>
 														<tr class="active">
-															<th scope="col">Student Name</th>
-															<th scope="col">Index Number</th>
-															<th scope="col">Mobile Number</th>
-															<th scope="col">Programme</th>
-															<th scope="col">Level</th>
-															<th scope="col">Session</th>
-															<th scope="col">Registration Type</th>
+															<th scope="col" style="text-align:center">Student Name</th>
+															<th scope="col" style="text-align:center">Index Number</th>
+															<!-- <th scope="col" style="text-align:center">Mobile Number</th> -->
+															<th scope="col" style="text-align:center">Programme</th>
+															<th scope="col" style="text-align:center">Level</th>
+															<th scope="col" style="text-align:center">Session</th>
+															<th scope="col" style="text-align:center">Registration Type</th>
 														</tr>
 													</thead>
 													<tbody>
-														<tr>
-															<td>Wright Octopos</td>
-															<td>01173054D</td>
-															<td>0234445546</td>
-															<td>Computer Science</td>
-															<td>300</td>
-															<td>Fulltime</td>
-															<td>Industrial</td>
-														</tr>
-														<tr>
-															<td>Wright Octopos</td>
-															<td>01173054D</td>
-															<td>0234445546</td>
-															<td>Computer Science</td>
-															<td>300</td>
-															<td>Part-time</td>
-															<td>Industrial</td>
-														</tr>
-														<tr>
-															<td>Wright Octopos</td>
-															<td>01173054D</td>
-															<td>0234445546</td>
-															<td>Computer Science</td>
-															<td>300</td>
-															<td>Fulltime</td>
-															<td>Part-time</td>
-														</tr>
-														<tr>
-															<td>Wright Octopos</td>
-															<td>01173054D</td>
-															<td>0234445546</td>
-															<td>Computer Science</td>
-															<td>300</td>
-															<td>Fulltime</td>
-															<td>Industrial</td>
-														</tr>
-														<tr>
-															<td>Wright Octopos</td>
-															<td>01173054D</td>
-															<td>0234445546</td>
-															<td>Computer Science</td>
-															<td>300</td>
-															<td>Part-time</td>
-															<td>Virtual</td>
-														</tr>
-														<tr>
-															<td>Wright Octopos Kwasi Amoateng</td>
-															<td>01173054D</td>
-															<td>0234445546</td>
-															<td>Computer Science</td>
-															<td>300</td>
-															<td>Fulltime</td>
-															<td>Industrial</td>
-														</tr>
-														<tr>
-															<td>Wright Octopos</td>
-															<td>01173054D</td>
-															<td>0234445546</td>
-															<td>Computer Science</td>
-															<td>300</td>
-															<td>Fulltime</td>
-															<td>Virtual</td>
-														</tr>
-														<tr>
-															<td>Wright Octopos</td>
-															<td>01173054D</td>
-															<td>0234445546</td>
-															<td>Computer Science</td>
-															<td>300</td>
-															<td>Fulltime</td>
-															<td>Industrial</td>
-														</tr>
-														<tr>
-															<td>Wright Octopos</td>
-															<td>01173054D</td>
-															<td>0234445546</td>
-															<td>Computer Science</td>
-															<td>300</td>
-															<td>Fulltime</td>
-															<td>Industrial</td>
-														</tr>
-														<tr>
-															<td>Wright Octopos</td>
-															<td>01173054D</td>
-															<td>0234445546</td>
-															<td>Computer Science</td>
-															<td>300</td>
-															<td>Fulltime</td>
-															<td>Virtual</td>
-														</tr>
-														<tr>
-															<td>Wright Octopos</td>
-															<td>01173054D</td>
-															<td>0234445546</td>
-															<td>Computer Science</td>
-															<td>300</td>
-															<td>Fulltime</td>
-															<td>Virtual</td>
-														</tr>
-														<tr>
-															<td>Wright Octopos</td>
-															<td>01173054D</td>
-															<td>0234445546</td>
-															<td>Computer Science</td>
-															<td>300</td>
-															<td>Fulltime</td>
-															<td>Industrial</td>
-														</tr>
-														<tr>
-															<td>Wright Octopos</td>
-															<td>01173054D</td>
-															<td>0234445546</td>
-															<td>Computer Science</td>
-															<td>300</td>
-															<td>Fulltime</td>
-															<td>Industrial</td>
-														</tr>
-														<tr>
-															<td>Wright Octopos</td>
-															<td>01173054D</td>
-															<td>0234445546</td>
-															<td>Computer Science</td>
-															<td>300</td>
-															<td>Fulltime</td>
-															<td>Industrial</td>
-														</tr>
-														<tr>
-															<td>Wright Octopos</td>
-															<td>01173054D</td>
-															<td>0234445546</td>
-															<td>Computer Science</td>
-															<td>300</td>
-															<td>Fulltime</td>
-															<td>Virtual</td>
-														</tr>
-														<tr>
-															<td>Wright Octopos</td>
-															<td>01173054D</td>
-															<td>0234445546</td>
-															<td>Computer Science</td>
-															<td>300</td>
-															<td>Fulltime</td>
-															<td>Industrial</td>
-														</tr>
-														<tr>
-															<td>Wright Octopos</td>
-															<td>01173054D</td>
-															<td>0234445546</td>
-															<td>Computer Science</td>
-															<td>300</td>
-															<td>Fulltime</td>
-															<td>Industrial</td>
-														</tr>
+
+													<?php 
+
+													// Get Virtual Attachment Data  //
+													$mysql_query_command_1 = $mysql_query_1;
+													$execute_result_query = mysqli_query($db, $mysql_query_command_1);
+
+													while ($row_set = mysqli_fetch_array($execute_result_query)) {
+														echo "<tr>";
+														    echo "<td style='text-align:center'>".$row_set["first_name"]."&nbsp;".$row_set["last_name"]."</td>";
+															echo "<td style='text-align:center'>".$row_set["index_number"]."</td>";
+															//echo "<td style='text-align:center'>".$row_set["mobile_number"]."</td>";
+															echo "<td style='text-align:center'>".$row_set["program"]."</td>";
+															echo "<td style='text-align:center'>".$row_set["level"]."</td>";
+															echo "<td style='text-align:center'>".$row_set["session"]."</td>";
+															echo "<td style='text-align:center'>"."Virtual Attachment"."</td>";
+														echo "</tr>";
+													}
+
+											///////////////////////////////////////////////////////////////////////////////////////////////
+											
+													// Get Industrial Attachment Data  //
+													$mysql_query_command_2 = $mysql_query_2;
+													$execute_result_query_2 = mysqli_query($db, $mysql_query_command_2);
+
+													while ($row_set_2 = mysqli_fetch_array($execute_result_query_2)) {
+														echo "<tr>";
+														    echo "<td style='text-align:center'>".$row_set_2["first_name"]."&nbsp;".$row_set_2["last_name"]."</td>";
+															echo "<td style='text-align:center'>".$row_set_2["index_number"]."</td>";
+															//echo "<td style='text-align:center'>".$row_set_2["mobile_number"]."</td>";
+															echo "<td style='text-align:center'>".$row_set_2["program"]."</td>";
+															echo "<td style='text-align:center'>".$row_set_2["level"]."</td>";
+															echo "<td style='text-align:center'>".$row_set_2["session"]."</td>";
+															echo "<td style='text-align:center'>"."Industrial Attachment"."</td>";
+														echo "</tr>";
+													}
+													
+										   ///////////////////////////////////////////////////////////////////////////////////////////////
+
+													?>
 													</tbody>
 												</table>
 												<!-- TABLE ENDS HERE -->

@@ -171,7 +171,7 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
 
 			  <hr class="sidebar-divider">
 
-			  <li>
+			  <!-- <li>
 				<a href="view_student_logbooks.php">
 					<i class="fa fa-book"></i> 
 					<span>View Student Logbook</span>
@@ -186,6 +186,15 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
 					<span>View Student Reports</span>
 				</a>
 			</li>	
+
+			  <hr class="sidebar-divider"> -->
+
+			  <li class="treeview">
+				<a href="add_admin.php">
+				 <i class="fa fa-plus"></i>
+				 <span>Add New Admin</span>
+				</a>
+			  </li>
 
 			  <hr class="sidebar-divider">
 

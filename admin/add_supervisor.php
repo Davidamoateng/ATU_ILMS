@@ -10,6 +10,69 @@
 	  $_SESSION['msg'] = "Please log in first ...";
 	  header('location: ../login.php');
   }
+
+  if (isset($_POST["add_btn"])) {    
+
+	$supervisor_name = $_POST["inputSupervisorName"];
+	$supervisor_department = $_POST["inputSupervisorDepartment"];
+	$supervisor_contact = $_POST["inputSupervisorContact"];
+	$supervisor_faculty = $_POST["inputSupervisorFaculty"];
+	$supervisor_id = $_POST["inputSupervisorId"];
+	$supervisor_region_residence = $_POST["inputResidentRegion"];
+	$school_supervisor_password = $_POST["inputSchoolSupervisorPassword"];
+	$industry_supervisor_password = $_POST["inputIndustrySupervisorPassword"];
+
+	if ($supervisor_name != "" && $supervisor_department != "" && $supervisor_contact != "" && $supervisor_faculty != "" && $supervisor_id != "" && $supervisor_region_residence != "" && $school_supervisor_password != "" && $industry_supervisor_password != "") {
+		
+	$supervisor_id = $_POST["inputSupervisorId"];
+		        $check_supervisor_existence = "SELECT * FROM school_supervisors WHERE `supervisor_id` = '$supervisor_id'";
+				$supervisor_existence_query = mysqli_query($db, $check_supervisor_existence);
+				$supervisor_query_presence = mysqli_num_rows($supervisor_existence_query);
+
+		if ($supervisor_query_presence == 1) {
+
+			echo "<script>alert('Error... Supervisor already exists..! Please enter a different Supervisor Id ..')</script>";
+
+		} else {
+
+			$my_insert_query = "INSERT INTO `school_supervisors` (`id`, `supervisor_name`, `supervisor_department`, `supervisor_contact`, `supervisor_faculty`, `supervisor_id`, `supervisor_region_residence`) 
+							VALUES (NULL, '$supervisor_name', '$supervisor_department', '$supervisor_contact', '$supervisor_faculty', '$supervisor_id', '$supervisor_region_residence')";
+		
+
+			if ($execute_my_insert_query = mysqli_query($db, $my_insert_query)){
+
+				// Insert School Supervisor Password //
+				$insert_school_supervisor_password = "INSERT INTO supervisors_login (`id`, `username`, `password`, `date`, `status`) 
+				                                       VALUES (NULL, '$supervisor_name', '$school_supervisor_password', CURRENT_TIMESTAMP, 'school')";
+				$execute_school_supervisor_pwd_query = mysqli_query($db, $insert_school_supervisor_password);
+
+				// Insert Industry Supervisor Password //
+				$insert_industry_supervisor_password = "INSERT INTO supervisors_login (`id`, `username`, `password`, `date`, `status`) 
+				                                       VALUES (NULL, '$supervisor_name', '$industry_supervisor_password', CURRENT_TIMESTAMP, 'industry')";
+				$execute_industry_supervisor_pwd_query = mysqli_query($db, $insert_industry_supervisor_password);
+
+				echo "<script>alert ('Supervisor has been added successfully ...');</script>";
+
+			} else {
+
+				echo "<script>alert ('Error...  adding Supervisor failed.!! Please try again..');</script>";
+				
+			}
+
+		}
+		
+							
+	} else {
+
+		echo "<script>alert ('Please fill all input fields ...');</script>";
+
+	}
+
+	
+
+  }
+
+
 ?>
 
 <!DOCTYPE HTML>
@@ -171,7 +234,7 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
 
 			  <hr class="sidebar-divider">
 
-			  <li>
+			  <!-- <li>
 				<a href="view_student_logbooks.php">
 					<i class="fa fa-book"></i> 
 					<span>View Student Logbook</span>
@@ -186,6 +249,15 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
 					<span>View Student Reports</span>
 				</a>
 			</li>
+
+			  <hr class="sidebar-divider"> -->
+
+			  <li class="treeview">
+				<a href="add_admin.php">
+				 <i class="fa fa-plus"></i>
+				 <span>Add New Admin</span>
+				</a>
+			  </li>
 
 			  <hr class="sidebar-divider">
 
@@ -280,16 +352,16 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
 									 <div class="panel-body"> 
 										<div class="form-body widget_shadow_panel">
 							
-											<form> 
+											<form method="post" action=""> 
 												<div class="row">
 													<div class="form-group col-md-6"> 
-														<label for="InputSupervisorName">Supervisor Name:</label> 
-														<input type="text" class="form-control" id="SupervisorName" placeholder="Enter Supervisor Name" required> 
+														<label for="InputSupervisorName">Supervisor Name<b style="color:red;">*</b>:</label> 
+														<input type="text" class="form-control" id="SupervisorName" name="inputSupervisorName" onkeypress="return alphabet_space(event)" placeholder="Enter Supervisor Name" required> 
 													</div>
 													<div class="row">
 														<div class="form-group col-md-6">
-															<label for="InputSupervisorDepartment">Supervisor Department:</label> 
-															<select id="inputSupervisorDepartment" class="form-control" required>
+															<label for="InputSupervisorDepartment">Supervisor Department<b style="color:red;">*</b>:</label> 
+															<select id="SupervisorDepartment" class="form-control" name="inputSupervisorDepartment" required>
 																<option selected="">--Select Supervisor Department--</option>
 																<option>Accountancy</option>
 																<option>Building Technology</option>
@@ -313,13 +385,13 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
 
 												<div class="row">
 													<div class="form-group col-md-6"> 
-														<label for="InputSupervisorContact">Supervisor Contact:</label> 
-														<input type="text" class="form-control" id="SupervisorContact" placeholder="Enter Supervisor Contact" required> 
+														<label for="InputSupervisorContact">Supervisor Contact<b style="color:red;">*</b>:</label> 
+														<input type="text" class="form-control" id="SupervisorContact" name="inputSupervisorContact" onkeypress="return number_plus(event)" placeholder="Enter Supervisor Contact" required> 
 													</div>
 													<div class="row">
 														<div class="form-group col-md-6">
-															<label for="InputSupervisorFaculty">Supervisor Faculty:</label> 
-															<select id="inputSupervisorFaculty" class="form-control" required>
+															<label for="InputSupervisorFaculty">Supervisor Faculty<b style="color:red;">*</b>:</label> 
+															<select id="SupervisorFaculty" class="form-control" name="inputSupervisorFaculty" required>
 																<option selected="">--Select Supervisor Faculty--</option>
 																<option>Faculty of Applied Arts</option>
 																<option>Faculty of Applied Science</option>
@@ -333,13 +405,13 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
 
 												<div class="row">
 													<div class="form-group col-md-6"> 
-														<label for="InputSupervisorEmail">Supervisor Email:</label> 
-														<input type="text" class="form-control" id="SupervisorEmail" placeholder="Enter Valid Email Address" required> 
+														<label for="InputSupervisorId">Supervisor Id<b style="color:red;">*</b>:</label> 
+														<input type="text" class="form-control" id="SupervisorId" name="inputSupervisorId" pattern="[0-9D]{9}" title="(User ID must Contain 8 digits and a Capital 'D')" onkeypress="return num_d(event)" placeholder="Enter Supervisor Id" required> 
 													</div>
 													<div class="row">
 														<div class="form-group col-md-6">
-															<label for="InputResidentRegion">Resident Region:</label> 
-															<select id="inputResidentRegion" class="form-control" required>
+															<label for="InputResidentRegion">Resident Region<b style="color:red;">*</b>:</label> 
+															<select id="ResidentRegion" class="form-control" name="inputResidentRegion" required>
 																<option selected="">--Select Resident Region--</option>
 																<option>Ashanti Region</option>
 																<option>Ahafo Region</option>
@@ -362,14 +434,26 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
 												    </div>
 												</div>
 
-												
+												<div class="row">
+													<div class="form-group col-md-6"> 
+														<label for="InputSchoolSupervisorPassword">School Supervisor Password<b style="color:red;">*</b>:</label> 
+														<input type="password" class="form-control" id="SchoolSupervisorPassword" name="inputSchoolSupervisorPassword" placeholder="Enter School Supervisor Password" required> 
+													</div>
 
+													<div class="form-group col-md-6"> 
+														<label for="InputIndustrySupervisorPassword">School Industry Password<b style="color:red;">*</b>:</label> 
+														<input type="password" class="form-control" id="IndustrySupervisorPassword" name="inputIndustrySupervisorPassword" placeholder="Enter Industry Supervisor Password" required> 
+													</div>
+												</div>
+
+												
 												<div class="text-center">
-													<button type="submit" class="btn btn-default">
+													<button type="submit" class="btn btn-default" name="add_btn">
 														<i class="fa fa-plus-circle"></i>
 														Add
 													</button>
-												</div> 
+												</div>
+
 											</form> 	
 										
 										</div>

@@ -10,6 +10,64 @@
 	  $_SESSION['msg'] = "Please log in first ...";
 	  header('location: ../login.php');
   }
+
+  $admin_user_id = $_SESSION['user']['user_id'];
+     
+//   $pass = 'hayford';
+//   $hashPass = password_hash($pass, PASSWORD_DEFAULT);
+
+  
+
+
+  if (isset($_POST["change_btn"])) {
+
+	  $CurrentPassword = $_POST["inputCurrentPassword"];
+	  $NewPassword = $_POST["inputNewPassword"];
+	  $ConfirmNewPassword = $_POST["inputConfirmNewPassword"];
+
+	  
+	  
+	  if ($CurrentPassword != "" && $NewPassword != "" && $ConfirmNewPassword != "") {
+		  
+		
+
+		$my_query_command = "SELECT * FROM users WHERE `user_id` = '$admin_user_id' AND user_type = 'admin'";
+        $mysql_query = mysqli_query($db, $my_query_command);
+		$fetch_rows = mysqli_fetch_assoc($mysql_query);
+
+		$CurrentPasswordHashed = md5($CurrentPassword);
+		
+		if ($fetch_rows["user_id"] == "$admin_user_id" && $fetch_rows["password"] == "$CurrentPasswordHashed" && $fetch_rows["user_type"] == "admin") {
+
+			
+			if ($NewPassword == $ConfirmNewPassword) {
+
+				$NewPasswordHashed = md5($ConfirmNewPassword);
+
+				$update_command =  "UPDATE users SET `password` = '$NewPasswordHashed' WHERE `password` = '$CurrentPasswordHashed' AND `user_id` = '$admin_user_id'";
+				$execute_update_query = mysqli_query($db, $update_command);
+
+				echo "<script>alert('Your Password has been changed Successfully ...')</script>";
+
+			} else {
+
+				echo "<script>alert('Error.. Passwords do not match..!! Please try again..')</script>";
+
+			}
+			
+		}else{
+			echo "<script>alert('Error.. Password does not exist..!! Please try again..')</script>";
+		}
+	
+	  }else {
+		  
+		 echo "<script>alert ('Please fill all input fields ...');</script>";
+
+	  }
+
+  }
+
+
 ?>
 
 <!DOCTYPE HTML>
@@ -171,7 +229,7 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
 
 			  <hr class="sidebar-divider">
 
-			  <li>
+			  <!-- <li>
 				<a href="view_student_logbooks.php">
 					<i class="fa fa-book"></i> 
 					<span>View Student Logbook</span>
@@ -186,6 +244,15 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
 					<span>View Student Reports</span>
 				</a>
 			</li>	
+
+			  <hr class="sidebar-divider"> -->
+
+			  <li class="treeview">
+				<a href="add_admin.php">
+				 <i class="fa fa-plus"></i>
+				 <span>Add New Admin</span>
+				</a>
+			  </li>
 
 			  <hr class="sidebar-divider">
 
@@ -285,26 +352,26 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
 												<div class="row">
 													<div class="form-group col-md-12"> 
 														<label for="InputCurrentPassword">Current Password:</label> 
-														<input type="text" class="form-control" id="CurrentPassword" placeholder="Enter Current Password" required> 
+														<input type="password" class="form-control" id="CurrentPassword" name="inputCurrentPassword" placeholder="Enter Current Password" required> 
 													</div>
-												</div>
+												</div>           
 
 												<div class="row">
 													<div class="form-group col-md-12"> 
 														<label for="InputNew Password">New Password:</label> 
-														<input type="text" class="form-control" id="NewPassword" placeholder="Enter New Password" required> 
+														<input type="password" class="form-control" id="NewPassword" name="inputNewPassword" placeholder="Enter New Password" required> 
 													</div>
 												</div>
 
 												<div class="row">
 													<div class="form-group col-md-12"> 
 														<label for="InputConfirmNewPassword">Confirm New Password:</label> 
-														<input type="text" class="form-control" id="ConfirmNewPassword" placeholder="Confirm New Password" required> 
+														<input type="password" class="form-control" id="ConfirmNewPassword" name="inputConfirmNewPassword" placeholder="Confirm New Password" required> 
 													</div>
 												</div>
 
 												<div class="text-center">
-													<button type="submit" class="btn btn-default">
+													<button type="submit" name="change_btn" class="btn btn-default">
 														<i class="fa fa-unlock-alt"></i>
 														Change
 													</button>

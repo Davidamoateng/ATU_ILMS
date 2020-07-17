@@ -1,5 +1,6 @@
 <?php 
-    include('functions.php'); 
+	include('functions.php');
+	//include('user_reg_functions.php');
 
 	if (!isLoggedIn()) {
 		$_SESSION['msg'] = "Please log in first ...";
@@ -11,69 +12,136 @@
 		header('location: login.php');
 	}
 
-
-
-	$firstName = $_COOKIE["first_name"];
-	$lastName = $_COOKIE["last_name"];
-	$indexNumber = $_COOKIE["index_number"];
+	$firstName = $_SESSION['user']['first_name'];
+	$lastName = $_SESSION['user']['last_name'];
+	$indexNumber = $_SESSION['user']['user_id']; 
 
 	$regions = array("--Select Company Region--","Ashanti Region","Ahafo Region","Bono East Region","Brong Ahafo Region","Central Region","Eastern Region",
 	"Greater Accra Region","North East Region","Northern Region","Oti Region","Savannah Region","Upper East Region","Upper West Region","Volta Region",
 	"Western North Region","Western Region");
 
-	$programs = array("--Select Program--","Accountancy","Building Technology","Civil Engineering","Computer Science","Electrical / Electronics Engineering",
-	"Fashion Design & Textiles","Furniture Design & Production","Hotel, Catering & Institutional Management","Languages & Liberal Studies","Mathematics & Statistics",
-	"Marketing","Mechanical Engineering","Purchasing & Supply","Science Laboratory Technology","Secretaryship & Management Studies");
+	// $programs = array("--Select Program--","Accountancy","Building Technology","Civil Engineering","Computer Science","Electrical / Electronics Engineering",
+	// "Fashion Design & Textiles","Furniture Design & Production","Hotel, Catering & Institutional Management","Languages & Liberal Studies","Mathematics & Statistics",
+	// "Marketing","Mechanical Engineering","Purchasing & Supply","Science Laboratory Technology","Secretaryship & Management Studies");
 
-	$getUserDetails = "SELECT * FROM virtual_attachment_registration WHERE index_number = '$indexNumber' AND first_name = '$firstName' AND last_name = '$lastName'";
-	$runGetDetails = mysqli_query($db, $getUserDetails);
-	$executeGetDetailsCommand = mysqli_num_rows($runGetDetails);
-	
+	// Get Virtual Attachment User Details //
 
-	if ($executeGetDetailsCommand == 1) {
+	$get_virtual_user_details = "SELECT * FROM virtual_attachment_registration WHERE first_name = '$firstName' AND last_name = '$lastName' AND index_number = '$indexNumber'";
+	$run_get_virtual_user_details = mysqli_query($db, $get_virtual_user_details);
+	$execute_get_virtual_user_details = mysqli_num_rows($run_get_virtual_user_details);
 
-		$getDetails = mysqli_fetch_assoc($runGetDetails);
+	if ($execute_get_virtual_user_details == 1) {
 
-		$studentProgram = $getDetails["program"];
-		$studentSession = $getDetails["session"];
-		$studentLevel = $getDetails["level"];
-		$studentOtherName = $getDetails["other_name"];
+		$get_virtual_user_details = mysqli_fetch_assoc($run_get_virtual_user_details);
 
-		setcookie("student_program_holder", $studentProgram, time() + (86400 * 30));
-		setcookie("student_session_holder", $studentSession, time() + (86400 * 30));
-		setcookie("student_level_holder", $studentLevel, time() + (86400 * 30));
-		setcookie("student_other_name_holder", $studentOtherName, time() + (86400 * 30));
-		setcookie("student_registration_type", "virtual registration", time() + (86400 * 30));
-		$studentRegistrationType = "VIRTUAL REGISTRATION";
+		$otherName = $get_virtual_user_details["other_name"];
+		$program = $get_virtual_user_details["program"];
+		$session = $get_virtual_user_details["session"];
+		$level = $get_virtual_user_details["level"];
 
-	}else {
+		$registration_type = "Virtual Attachment";
+
+	} else {
+
+		 // Get Industrial Attachment User Details //
+		$get_industrial_user_details = "SELECT * FROM industrial_attachment_registration WHERE first_name = '$firstName' AND last_name = '$lastName' AND index_number = '$indexNumber'";
+	    $run_get_industrial_user_details = mysqli_query($db, $get_industrial_user_details);
+		$execute_get_industrial_user_details = mysqli_num_rows($run_get_industrial_user_details);
 		
-		$checkingUserIndustrial = "SELECT * FROM industrial_attachment_registration WHERE index_number = '$indexNumber' AND first_name = '$firstName' AND last_name = '$lastName'";
-		$checkingUserQuery = mysqli_query($db, $checkingUserIndustrial);
-		$checkUserExistence = mysqli_num_rows($checkingUserQuery);
+		if ($execute_get_industrial_user_details == 1) {
 
-		if ($checkUserExistence == 1) {
+			$get_industrial_user_details = mysqli_fetch_assoc($run_get_industrial_user_details);
 
-			$getUserInfo = mysqli_fetch_assoc($checkingUserQuery);
-			
-			$studentSession = $getUserInfo["session"];
-			$studentLevel = $getUserInfo["level"];
-			$studentProgram = $getUserInfo["program"];
-			$studentOtherName = $getUserInfo["other_name"];
+			$otherName = $get_industrial_user_details["other_name"];
+			$program = $get_industrial_user_details["program"];
+			$session = $get_industrial_user_details["session"];
+			$level = $get_industrial_user_details["level"];
 
-			setcookie("student_program_holder" ,$studentProgram, time() + (86400 * 30));
-			setcookie("student_session_holder" ,$studentSession, time() + (86400 * 30));
-			setcookie("student_level_holder" ,$studentLevel, time() + (86400 * 30));
-			setcookie("student_other_name_holder" ,$studentOtherName, time() + (86400 * 30));
-			setcookie("student_registration_type" ,"industrial registration", time() + (86400 * 30));
-			$studentRegistrationType = "INDUSTRIAL REGISTRATION";
-			$statusNumber = 2;
+			$registration_type = "Industrial Attachment";
+			$status_number = 2;
 
-		}else {
-			//header("Location:registration.php");
+
+		} else {
+
+			header("Location: registration.php");
+		
 		}
 		
 	}
+
+	// Proceed to Submit Student Assumption //
+	if (isset($_POST["submit_btn"])) { 
+
+		$mobile_number = $_POST["inputMobileNumber"];
+		$company_name = $_POST["inputCompanyName"];
+		$supervisor_name = $_POST["inputSupervisorName"];
+		$supervisor_contact = $_POST["inputSupervisorContact"];
+		$supervisor_email = $_POST["inputSupervisorEmail"];
+		$company_region = $_POST["inputCompanyRegion"];
+		$company_address = $_POST["inputCompanyAddress"];
+
+
+		if ($_POST["inputMobileNumber"] != "" && $_POST["inputCompanyName"] != "" && $_POST["inputSupervisorName"] != "" && $_POST["inputSupervisorContact"] != "" && $_POST["inputSupervisorEmail"]  != "" && $_POST["inputCompanyRegion"] != "" && $_POST["inputCompanyAddress"] != "") {
+			
+			$avoid_duplicate = "SELECT * FROM students_assumption WHERE index_number = '$indexNumber' LIMIT 1";
+			$execute_avoid_duplicate_query = mysqli_query($db, $avoid_duplicate);
+			$check_avoidance_query = mysqli_num_rows($execute_avoid_duplicate_query);
+
+			if ($check_avoidance_query == 1) {
+
+				echo "<script>alert('Sorry...Your Assumption details have already been submitted.!!</script>";
+
+			} else {
+
+				$my_insert_query = "INSERT INTO `students_assumption` (`id`, `first_name`, `last_name`, `other_name`, `mobile_number`, `program`, `index_number`, `session`, `level`, `company_name`, `supervisor_name`, `supervisor_contact`, `supervisor_email`, `company_region`, `company_address`, `registration_type`, `date`) 
+				                     VALUES (NULL, '$firstName', '$lastName', '$otherName', '$mobile_number', '$program', '$indexNumber', '$session', '$level', '$company_name', '$supervisor_name', '$supervisor_contact', '$supervisor_email', '$company_region', '$company_address', '$registration_type', CURRENT_TIMESTAMP)";
+				
+				
+
+				if ($run_query = mysqli_query($db, $my_insert_query)) {
+
+					echo "<script>alert('Congrats...Your Assumption details have already been submitted Successfully')</script>";
+
+					if ($registration_type == "Virtual Attachment") {
+
+						$my_update_query_1 = "UPDATE `virtual_attachment_registration` SET `industry_supervisor_name` = '$supervisor_name' WHERE index_number = '$indexNumber'";
+						$execute_my_update_query = mysqli_query($db, $my_update_query_1);
+
+						$my_update_query_2 = "UPDATE `virtual_attachment_registration` SET `industry_supervisor_contact` = '$supervisor_contact' WHERE index_number = '$indexNumber'";
+						$execute_my_update_query = mysqli_query($db, $my_update_query_2);
+
+						$my_update_query_3 = "UPDATE `virtual_attachment_registration` SET `attachment_region` = 'Greater Accra' WHERE index_number = '$indexNumber'";
+						$execute_my_update_query = mysqli_query($db, $my_update_query_3);
+
+					} else {
+
+						$my_update_query_1 = "UPDATE `industrial_attachment_registration` SET `industry_supervisor_name` = '$supervisor_name' WHERE index_number = '$indexNumber'";
+						$execute_my_update_query = mysqli_query($db, $my_update_query_1);
+
+						$my_update_query_2 = "UPDATE `industrial_attachment_registration` SET `industry_supervisor_contact` = '$supervisor_contact' WHERE index_number = '$indexNumber'";
+						$execute_my_update_query = mysqli_query($db, $my_update_query_2);
+
+						$my_update_query_3 = "UPDATE `industrial_attachment_registration` SET `attachment_region` = '$company_region' WHERE index_number = '$indexNumber'";
+						$execute_my_update_query = mysqli_query($db, $my_update_query_3);
+
+					}
+					
+
+				} else {
+
+					echo "<script>alert('Error...Details Not Submitted.!! Please try again ..')</script>";
+
+				}
+				
+				// var_dump($my_insert_query);
+
+			}
+			
+
+		}
+
+	}
+	
 
 ?>
 
@@ -330,45 +398,45 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
 														<h3 class="instruction-title2">Student's Information</h3>
 														<div class="hr2"></div>
 
-													<form> 
+													<form action="" method="post"> 
 														<div class="row">
 															<div class="form-group col-md-6"> 
-																<label for="inputFirstName">First Name:</label> 
-																<input type="text" class="form-control" id="firstName" name="first_name" disabled value="<?php echo $firstName; ?>" placeholder="Enter First Name" required> 
+																<label for="inputFirstName">First Name<b style="color:red;">*</b>:</label> 
+																<input type="text" class="form-control" id="firstName" name="first_name" disabled value="<?php echo $firstName; ?>" onkeypress="return alphabet(event)" placeholder="Enter First Name" required> 
 															</div>
 															<div class="form-group col-md-6"> 
-																<label for="inputLastName">Last Name:</label> 
-																<input type="text" class="form-control" id="lastName" name="last_name" disabled value="<?php echo $lastName; ?>" placeholder="Enter Last Name" required> 
+																<label for="inputLastName">Last Name<b style="color:red;">*</b>:</label> 
+																<input type="text" class="form-control" id="lastName" name="last_name" disabled value="<?php echo $lastName; ?>" onkeypress="return alphabet(event)" placeholder="Enter Last Name" required> 
 															</div> 
 														</div> 
 														<div class="row">
 																<div class="form-group col-md-6"> 
 																	<label for="inputOtherName">Other Name(s):</label> 
-																	<input type="text" class="form-control" id="otherName" name="otherName" disabled value="<?php echo $studentOtherName; ?>" placeholder="Enter Other Name(s):"> 
+																	<input type="text" class="form-control" id="otherName" name="otherName" disabled value="<?php echo $otherName; ?>" onkeypress="return alphabet(event)" placeholder="Enter Other Name(s):"> 
 																</div>
 																<div class="form-group col-md-6"> 
-																	<label for="inputMobileNumber">Mobile Number(s):</label> 
-																	<input type="text" class="form-control" id="mobileNumber" name="mobileNumber" value="<?php echo $mobileNumber; ?>" placeholder="Enter Mobile Number (eg. 0542054285)" required> 
-																</div> 
+																	<label for="inputIndexNumber">Index Number<b style="color:red;">*</b>:</label> 
+																	<input type="text" class="form-control" id="indexNumber" name="indexNumber" value="<?php echo $indexNumber; ?>" pattern="[0-9D]{9}" title="(User ID must Contain 8 digits and a Capital 'D')" onkeypress="return num_d(event)" placeholder="Enter Index Number" required> 
+																</div>
 															</div> 
 															<div class="row">
 																	<div class="form-group col-md-6"> 
-																		<label for="inputProgram">Program:</label> 
-																		<input type="text" class="form-control" id="program" name="program" disabled value="<?php echo $studentProgram; ?>" placeholder="Enter Program" required> 
+																		<label for="inputMobileNumber">Mobile Number(s)<b style="color:red;">*</b>:</label> 
+																		<input type="text" class="form-control" id="mobileNumber" name="inputMobileNumber" value="" onkeypress="return number_plus(event)" placeholder="Enter Mobile Number (eg. 0542054285)" required> 
+																	 </div>
+																	 <div class="form-group col-md-6"> 
+																		<label for="inputProgram">Program<b style="color:red;">*</b>:</label> 
+																		<input type="text" class="form-control" id="program" name="program" disabled value="<?php echo $program; ?>" onkeypress="return alphabet(event)" placeholder="Enter Program" required> 
 																	</div>
-																	<div class="form-group col-md-6"> 
-																		<label for="inputIndexNumber">Index Number:</label> 
-																		<input type="text" class="form-control" id="indexNumber" name="indexNumber" value="<?php echo $indexNumber; ?>" placeholder="Enter Index Number" required> 
-																	</div> 
 																</div> 
 																<div class="row">
 																		<div class="form-group col-md-6"> 
-																			<label for="inputSession">Session:</label> 
-																			<input type="text" class="form-control" id="session" name="session" disabled value="<?php echo $studentSession; ?>" placeholder="Enter Session" required> 
+																			<label for="inputSession">Session<b style="color:red;">*</b>:</label> 
+																			<input type="text" class="form-control" id="session" name="session" disabled value="<?php echo $session; ?>"  placeholder="Enter Session" required> 
 																		</div>
 																		<div class="form-group col-md-6"> 
-																			<label for="inputLevel">Level:</label> 
-																			<input type="text" class="form-control" id="level" name="level" disabled value="<?php echo $studentLevel; ?>" placeholder="Enter Level" required> 
+																			<label for="inputLevel">Level<b style="color:red;">*</b>:</label> 
+																			<input type="text" class="form-control" id="level" name="level" disabled value="<?php echo $level; ?>" placeholder="Enter Level" required> 
 																		</div> 
 																</div> 
 
@@ -377,30 +445,30 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
 																
 																<div class="row">
 																		<div class="form-group col-md-6"> 
-																			<label for="inputCompanyName">Company Name:</label> 
-																			<input type="text" class="form-control" id="companyName" name="companyName" placeholder="Enter Company Name" required> 
+																			<label for="inputCompanyName">Company Name<b style="color:red;">*</b>:</label> 
+																			<input type="text" class="form-control" id="companyName" name="inputCompanyName" onkeypress="return alpha_numeric_space(event)" placeholder="Enter Company Name" required> 
 																		</div>
 																		<div class="form-group col-md-6"> 
-																			<label for="InputSupervisorName">Supervisor Name:</label> 
-																			<input type="text" class="form-control" id="supervisorName" name="supervisorName" placeholder="Enter Supervisor Name"> 
+																			<label for="InputSupervisorName">Supervisor Name<b style="color:red;">*</b>:</label> 
+																			<input type="text" class="form-control" id="supervisorName" name="inputSupervisorName" onkeypress="return alpha_numeric_space(event)" placeholder="Enter Supervisor Name" required> 
 																		</div> 
 																</div>
 
 																<div class="row">
 																		<div class="form-group col-md-6"> 
-																			<label for="inputSupervisorContact">Supervisor Contact:</label> 
-																			<input type="text" class="form-control" id="supervisorContact" name="supervisorContact" placeholder="Enter Supervisor Contact"> 
+																			<label for="inputSupervisorContact">Supervisor Contact<b style="color:red;">*</b>:</label> 
+																			<input type="text" class="form-control" id="supervisorContact" name="inputSupervisorContact" onkeypress="return number_plus(event)" placeholder="Enter Supervisor Contact" required> 
 																		</div>
 																		<div class="form-group col-md-6"> 
 																			<label for="inputSupervisorEmail">Supervisor Email:</label> 
-																			<input type="text" class="form-control" id="supervisorEmail" name="supervisorEmail" placeholder="Enter Supervisor Email"> 
+																			<input type="email" class="form-control" id="supervisorEmail" name="inputSupervisorEmail" placeholder="Enter Supervisor Email"> 
 																		</div> 
 																</div>
-
+																
 																<div class="row">
 																	<div class="form-group col-md-12">
-																		<label for="inputCompanyRegion">Company Region:</label> 
-																		<select id="companyRegion" name="companyRegion" class="form-control" required>
+																		<label for="inputCompanyRegion">Company Region<b style="color:red;">*</b>:</label> 
+																		<select id="companyRegion" name="inputCompanyRegion" class="form-control" required>
 																			 <?php 
 																			    foreach($regions as $val) {
 																					echo "<option>".$val."</option>";
@@ -412,8 +480,8 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
 
 															<div class="form-row">
 																	<div class="form-group col-md-12">
-																		<label for="inputCompanyAddress"><b>Company Address:</b></label>
-																		<textarea class="form-control" id="companyAddress" name="companyAddress" placeholder="Enter Company's Address" width="100%" required></textarea>
+																		<label for="inputCompanyAddress"><b>Company Address<b style="color:red;">*</b>:</b></label>
+																		<textarea class="form-control" id="companyAddress" name="inputCompanyAddress" placeholder="Enter Company's Address" width="100%" required></textarea>
 																	</div>
 																</div>
 														<div class="text-center">
@@ -439,52 +507,6 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
 	</div>
 	<!--//footer-->
   </div>
-
-  <?php 
-     if (isset($_POST["submit_btn"])) {
-		 if ($_POST["companyName"] != "" && $_POST["supervisorName"] != "" && $_POST["supervisorContact"] != "" && $_POST["supervisorEmail"] != "" && $_POST["companyRegion"] != "" && $_POST["companyAddress"] != "") {
-			 $companyName = $_POST["companyName"];
-			 $indexNumber = $_POST["indexNumber"];
-			 $supervisorName = $_POST["supervisorName"];
-			 $supervisorContact = $_POST["supervisorContact"];
-			 $supervisorEmail = $_POST["supervisorEmail"];
-			 $companyRegion = $_POST["companyRegion"];
-			 $companyAddress = $_POST["companyAddress"];
-
-			 $avoid_duplicate = "SELECT * FROM students_assumption WHERE index_number = '$indexNumber' LIMIT 1";
-			 $executeAvoidDuplicateQuery = mysqli_query($db, $avoid_duplicate);
-			 $checkAvoidanceQuery = mysqli_num_rows($executeAvoidDuplicateQuery);
-
-			 if ($checkAvoidanceQuery == 1) {
-				 echo "<script> alert('Sorry..You have submitted your details already') </script>";
-			 }else {
-
-				 $myInsertQuery = "INSERT INTO students_assumption (`first_name`, `last_name`, `other_name`, `mobile_number`, `program`, `index_number`, `session`, `level`, `company_name`, `supervisor_name`, `supervisor_contact`, `supervisor_email`, `company_region`, `company_address`, `registration_type`, `date`) 
-				 VALUES ('$firstName', '$lastName', '$studentOtherName', '$mobileNumber', '$studentProgram', '$indexNumber', '$studentSession', '$studentLevel', '$companyName', '$supervisorName', '$supervisorContact', '$supervisorEmail', '$companyRegion', '$companyAddress', '$studentRegistrationType', CURRENT_TIMESTAMP)";
-
-				 if ($runQuery = mysqli_query($db, $myInsertQuery)) {
-					 echo "<script> alert('Details have been Submitted Success') <script>";
-
-					 if ($studentRegistrationType == "VIRTUAL REGISTRATION") {
-						 $myUpdateQuery = "UPDATE `virtual_attachment_registration` SET `supervisor_name` = '$supervisorName' WHERE index_number = '$indexNumber'";
-						 $executeMyUpdateQuery = mysqli_query($db, $myUpdateQuery);
-
-
-						 $myUpdateQuery2 = "UPDATE `virtual_attachment_registration` SET `supervisor_contact` = '$supervisorContact' WHERE index_number = '$indexNumber'";
-						 $executeMyUpdateQuery = mysqli_query($db, $myUpdateQuery2);
-
-						 $myUpdateQuery3 = "UPDATE `virtual_attachment_registration` SET `supervisor_contact` = '$supervisorContact' WHERE index_number = '$indexNumber'";
-						 $executeMyUpdateQuery = mysqli_query($db, $myUpdateQuery3);
-
-					 }
-				 }else {
-					 echo "<script> alert('Sorry...Details not Submitted') </script>";
-				 }
-			 }
-		 }
-	 }
- 
-  ?>
 		
 	
 	<!-- Classie --><!-- for toggle left push menu script -->

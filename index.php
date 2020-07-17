@@ -10,6 +10,9 @@
 		header('location: login.php');
 	}
 
+	$studentFirstName = $_SESSION['user']['first_name'];
+	$studentLastName = $_SESSION['user']['last_name'];
+
 ?>
 
 <!DOCTYPE HTML>
@@ -302,7 +305,10 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
 					</div>
 					<div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
 					  <div class="panel-body panel-text">
-						Once you have been able to login into the system, click on <b>"Register"</b> if you havent registered yet for the industrial Liaison.
+						  <p>
+							Once you have been able to login into the system, click on <b>Register</b> if you haven't registered yet 
+							for the Industrial Attachment / Internship.
+						  </p>
 					  </div>
 					</div>
 				  </div>
@@ -319,7 +325,10 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
 						</div>
 						<div id="collapseTwo" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingTwo">
 						  <div class="panel-body panel-text">
-							There are two (2) options, choose <b>VIRTUAL</b> if you a interning in the school or <b>INDUSTRIAL</b> if you are interning with a company of your choice.
+							  <p>
+								There are two (2) options, choose <b>VIRTUAL</b> if you a interning in the school or 
+								<b>INDUSTRIAL</b> if you are interning with a company of your choice.
+							  </p>
 						  </div>
 						</div>
 					  </div>
@@ -342,7 +351,10 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
 									</div>
 									<div id="collapseThree" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingThree" aria-expanded="false">
 									  <div class="panel-body panel-text">
-											In case you select <b>VIRTUAL</b> in Step 2, you will be asked to enter your receipt number and click on <b>VALIDATE</b> before you will be able to fill the form.
+											<p>
+												If you select <b>VIRTUAL</b> in Step 2, you will be asked to enter your receipt number which would be written on the receipt given to you after paying 
+												for the Virtual Attachment, then click on <b>VALIDATE</b> to fill the form.
+											</p>
 									  </div>
 									</div>
 								  </div>
@@ -359,7 +371,10 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
 										</div>
 										<div id="collapseFour" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingFour" aria-expanded="false">
 										  <div class="panel-body panel-text">
-											In case you select <b>INDUSTRIAL</b> in Step 2, you will be provided with a form to fill after which you should click on <b>SUBMIT</b> to submit the form to the Liason Office.
+											  <p>
+												If you select <b>INDUSTRIAL</b> in Step 2, you will be provided with a form to fill for Industrial Attachment 
+												after which you should click on <b>REGISTER</b> to submit the form to the Liaison Office.
+											  </p>
 										  </div>
 										</div>
 									  </div>
@@ -382,7 +397,10 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
 					</div>
 					<div id="collapseFive" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingFive" aria-expanded="false">
 					  <div class="panel-body panel-text">
-						After you have successfully submitted your registration details, click on <b>Submit Assumption</b> if you have not yet submitted your assumption form.
+						  <p>
+							After you have successfully submitted your registration details, click on 
+							<b>Submit Assumption</b> if you have not yet submitted your assumption form.
+						  </p>
 					  </div>
 					</div>
 				  </div>
@@ -399,7 +417,10 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
 					</div>
 					<div id="collapseSix" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingSix" aria-expanded="false">
 					  <div class="panel-body panel-text">
-						Once you have clicked on <b>Submit Assumption</b> in Step 5, a form will be given to you fill after which you have to click on <b>SUBMIT</b> to submit it to the Liason Office.
+						  <p>
+							Once you have clicked on <b>Submit Assumption</b> in Step 5, a form will be given to you fill, after that
+							click on <b>SUBMIT</b> to submit your details to the Liaison Office.
+						  </p>
 					  </div>
 					</div>
 				  </div>
@@ -422,7 +443,11 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
 					</div>
 					<div id="collapseSeven" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingSeven" aria-expanded="false">
 					  <div class="panel-body panel-text">
-						You can also click <b>E-Logbook</b> to record all the activities you have done througout the day. You should make sure you click on <b>SAVE</b> after you are done to avoid loosing your data.
+						  <p>
+							Click on <b>E-Logbook</b> to record all the activities you have done throughout the day,
+							make sure you click on <b>SAVE</b> after you are done to avoid loosing your data.
+							<b><u>Note:</u></b> you can edit your records anytime you want to, by clicking on <b>EDIT</b>
+						  </p>
 					  </div>
 					</div>
 				  </div>
@@ -439,7 +464,11 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
 					</div>
 					<div id="collapseEight" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingEight" aria-expanded="false">
 					  <div class="panel-body panel-text">
-						Clicking on <b>Company Supervisor</b> will open a page where officials supervising interns can grade the student. Students can't access this page unless a <b>Visiting Supervisor</b> gives the password to the supervisor accessing you.
+						  <p>
+							Clicking on <b>Industry Based Supervisor</b> will open a page where your industry based supervisor can grade the you. 
+							<b><u>Note:</u></b> Students can't access this page, unless a school supervisor visits your work place to access you
+							then he will provide the login password.
+						  </p>
 					  </div>
 					</div>
 				  </div>
@@ -463,7 +492,10 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
 					</div>
 					<div id="collapseNine" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingNine" aria-expanded="false">
 					  <div class="panel-body panel-text">
-						Clicking on the Visiting Supervisor would enable to graded by the Supervisor the school has choosen to supervise the student. This page would not be accessible by the student, only visiting supervisor can login with a password.
+						  <p>
+							Clicking on the <b>School Based Supervisor</b> will open a page where your school based supervisor can grade the you. 
+							<b><u>Note:</u></b> this is not accessible by the you, only school supervisors can login with a password.
+						  </p>
 					  </div>
 					</div>
 				  </div>
@@ -480,7 +512,10 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
 						  </div>
 						  <div id="collapseTen" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingTen" aria-expanded="false">
 							<div class="panel-body panel-text">
-								Clicking on the submit report would enable you the student to submit your industrial Liaison report to the Industrial Liason Office directly without having to print it and bring it to the school, now can do it online.
+								<p>
+									Clicking on the <b>Submit Report</b> will open a page where you the student can submit your industrial attachment report to the 
+									industrial liaison office without stress, make sure you click on <b>SUBMIT</b> after filling the form.
+								</p>
 							</div>
 						  </div>
 						</div>
@@ -489,7 +524,7 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
 				</div>
 
 
-				<div class="row">
+				<!-- <div class="row"> 
 
 						<div class="col-md-6">
 						  <div class="panel panel-default">
@@ -524,181 +559,14 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
 								  </div>
 								</div>
 							  </div>
-		
+							  	
 						</div>
-		
-
-				  
-				<!-- //accordion starts here -->
-
-
-
-        	<!-- <div class="row">
-				<div class="col-md-3 panel-grids">
-					<div class="panel panel-primary text-center"> 
-						<div class="panel-heading"> 
-							<h3 class="panel-title">Step 1</h3> 
-						</div> 
-						<div class="panel-body"> 
-							Once you have been able to login into the system, click on <b>"Register"</b> 
-							if you havent registered yet for the industrial Liaison
-						</div> 
-					</div>
-				</div>
-				<div class="col-md-3 panel-grids">
-						<div class="panel panel-primary text-center"> 
-							<div class="panel-heading"> 
-								<h3 class="panel-title">Step 2</h3> 
-							</div> 
-							<div class="panel-body"> 
-								There are two (2) options, choose <b>VIRTUAL</b> if you a interning in the 
-								school or <b>INDUSTRIAL</b> if you are interning with a company of your choice
-							</div> 
-						</div>
-					</div>
-					<div class="col-md-3 panel-grids">
-							<div class="panel panel-primary text-center"> 
-								<div class="panel-heading"> 
-									<h3 class="panel-title">Step 3</h3> 
-								</div> 
-								<div class="panel-body"> 
-										In case you select <b>VIRTUAL</b> in Step 2, you will be asked to 
-										enter your receipt number and click on <b>VALIDATE</b> before you 
-										will be able to fill the form 
-								</div> 
-							</div>
-						</div>
-
-						<div class="col-md-3 panel-grids">
-								<div class="panel panel-primary text-center"> 
-									<div class="panel-heading"> 
-										<h3 class="panel-title">Step 4</h3> 
-									</div> 
-									<div class="panel-body"> 
-										In case you select <b>INDUSTRIAL</b> in Step 2, you will be 
-										provided with a form to fill after which you should click on 
-										<b>SUBMIT</b> to submit the form to the Liason Office
-									</div> 
-								</div>
-							</div>
-			</div>
-				
-			
-			<div class="row">
-					<div class="col-md-3 panel-grids">
-						<div class="panel panel-primary text-center"> 
-							<div class="panel-heading"> 
-								<h3 class="panel-title">Step 5</h3> 
-							</div> 
-							<div class="panel-body"> 
-								Once you have been able to login into the system, click on <b>"Register"</b> 
-								if you havent registered yet for the industrial LiaisonAfter you have successfully 
-								submitted your registration details, click on <b>Submit Assumption</b> if you have not
-							    yet submitted your assumption form
-							</div> 
-						</div>
-					</div>
-					<div class="col-md-3 panel-grids">
-							<div class="panel panel-primary text-center"> 
-								<div class="panel-heading"> 
-									<h3 class="panel-title">Step 6</h3> 
-								</div> 
-								<div class="panel-body"> 
-									Once you have clicked on <b>Submit Assumption</b> in Step 5, a form
-									will be given to you fill after which you have to click on 
-									<b>SUBMIT</b> to submit it to the Liason Office
-								</div> 
-							</div>
-						</div>
-						<div class="col-md-3 panel-grids">
-								<div class="panel panel-primary text-center"> 
-									<div class="panel-heading"> 
-										<h3 class="panel-title">Step 7</h3> 
-									</div> 
-									<div class="panel-body"> 
-										You can also click <b>E-Logbook</b> to record all the activities 
-										you have done througout the day. You should make sure you 
-										click on <b>SAVE</b> after you are done to avoid loosing your data
-									</div> 
-								</div>
-							</div>
-	
-							<div class="col-md-3 panel-grids">
-									<div class="panel panel-primary text-center"> 
-										<div class="panel-heading"> 
-											<h3 class="panel-title">Step 8</h3> 
-										</div> 
-										<div class="panel-body"> 
-											Clicking on <b>Industry-Based Supervisor</b> will open a page where officials 
-											supervising interns can grade the student. Students cant access 
-											this page unless a <b>School-Based Supervisor</b> gives the password to the supervisor accessing you
-										</div> 
-									</div>
-								</div>
-				</div>
-
-				<div class="row">
-						<div class="col-md-3 panel-grids">
-							<div class="panel panel-primary text-center"> 
-								<div class="panel-heading"> 
-									<h3 class="panel-title">Step 9</h3> 
-								</div> 
-								<div class="panel-body"> 
-									Clicking on the School-Based Supervisors would enable to graded
-									by the Supervisor the school has choosen to supervise the student. 
-									This page would not be accessible by the student, only school based 
-									supervisor can login with a password
-								</div> 
-							</div>
-						</div>
-						<div class="col-md-3 panel-grids">
-								<div class="panel panel-primary text-center"> 
-									<div class="panel-heading"> 
-										<h3 class="panel-title">Step 10</h3> 
-									</div> 
-									<div class="panel-body"> 
-										Clicking on the submit report would enable you the student 
-										to submit your industrial attachment report to the Industrial 
-										Liason Office directly without having to print it and bring 
-										it to the school, now can do it online
-									</div> 
-								</div>
-							</div>
-							<div class="col-md-3 panel-grids">
-									<div class="panel panel-primary text-center"> 
-										<div class="panel-heading"> 
-											<h3 class="panel-title">Step 11</h3> 
-										</div> 
-										<div class="panel-body"> 
-											Your password is one of the few things that puts a barrier 
-											between your account and the outside world, In case you want 
-											to change your account password, just click on Change Password 
-											and fill in your details 
-										</div> 
-									</div>
-								</div>
-		
-								<div class="col-md-3 panel-grids">
-										<div class="panel panel-primary text-center"> 
-											<div class="panel-heading"> 
-												<h3 class="panel-title">Step 12</h3> 
-											</div> 
-											<div class="panel-body"> 
-												After you have finished with everything you want to do in the 
-												online management system, it is advisable for you to logout 
-												your account. This will prevent other users from using your 
-												account to perform other operations you are not even aware of
-											</div> 
-										</div>
-									</div> -->
-
-
-
-					</div>
+					</div> -->
         	
         	
 				  <div class="clearfix"> </div>
 				  
+				
 				</div>
 		    
 			</div>

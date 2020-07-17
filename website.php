@@ -9,7 +9,10 @@
     if (!isUser()) {
 		$_SESSION['msg'] = "Please log in first ...";
 		header('location: login.php');
-	}
+    }
+    
+    $studentFirstName = $_SESSION['user']['first_name'];
+	$studentLastName = $_SESSION['user']['last_name'];
 ?>
 
 <!DOCTYPE html>
@@ -135,6 +138,171 @@
                         Students can download the industrial attachment letter 
                         <a href="letter/Attachment Letter.pdf"><b><i class="fa fa-download"></i> here</b></a>.
                     </p>
+
+                    <p style="text-align: justify;"><strong>COMPANIES AND ORGANIZATIONS</strong></p>
+                    <p>
+                       Companies and organizations are interested in engaging students of  Accra Technical University 
+                       this attachment period, students are hereby given the opportunity to select companies or 
+                       organization from the table below:
+                    </p>
+                    <table class="table table-bordered text-center">
+							<thead>
+                                <tr>
+								  <th colspan="3" style="text-align:center">CENTRAL AND WESTERN REGION</th>
+								</tr>
+								<tr>
+								  <th style="text-align:center">COMPANY</th>
+								  <th style="text-align:center">PRG.</th>
+								  <th style="text-align:center">NO. OF STUDENTS</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+								  <td rowspan="6">TARKWA NSUAEM MUNICIPAL ASSEMBLY</td>
+								  <td>PS</td>
+								  <td>1</td>
+								</tr>
+                                <tr>
+								  <td>STATS</td>
+								  <td>2</td>
+								</tr>
+
+                                <tr>
+								  <td>CS</td>
+								  <td>1</td>
+								</tr>
+
+                                <tr>
+								  <td>BUILDING</td>
+								  <td>3</td>
+								</tr>
+                                <tr>
+								  <td>CIVIL</td>
+								  <td>3</td>
+								</tr>
+                                <tr>
+								  <td>EE</td>
+								  <td>1</td>
+								</tr>
+<!-- /////////////////////////////////////////////////////////////////////////////////////////// -->
+                                <tr>
+								  <td rowspan="4">TARKWA GOV'T HOSPITAL</td>
+								  <td>PS</td>
+								  <td>1</td>
+								</tr>
+                                <tr>
+								  <td>STATS</td>
+								  <td>1</td>
+								</tr>
+                                <tr>
+								  <td>HCIM</td>
+								  <td>2</td>
+								</tr>
+                                <tr>
+								  <td>SLT</td>
+								  <td>3</td>
+								</tr>
+<!-- /////////////////////////////////////////////////////////////////////////////////////////// -->
+                                <tr>
+								  <td rowspan="2">APOSTLE SAFO SUAYE TECH. & RESOURCE CENTER</td>
+								  <td>EE</td>
+								  <td>10</td>
+								</tr>
+                                <tr>
+								  <td>MECH</td>
+								  <td>10</td>
+								</tr>
+<!-- /////////////////////////////////////////////////////////////////////////////////////////// -->
+                                <tr>
+								  <td rowspan="9">VRA (TAKORADI THERMAL POWER STATION)</td>
+								  <td>ACCT</td>
+								  <td>2</td>
+								</tr>
+                                <tr>
+								  <td>SEC</td>
+								  <td>2</td>
+								</tr>
+                                <tr>
+								  <td>PS</td>
+								  <td>1</td>
+								</tr>
+                                <tr>
+								  <td>SLT</td>
+								  <td>2</td>
+								</tr>
+                                <tr>
+								  <td>CS</td>
+								  <td>2</td>
+								</tr>
+                                <tr>
+								  <td>CIVIL</td>
+								  <td>2</td>
+								</tr>
+                                <tr>
+								  <td>MECH</td>
+								  <td>4</td>
+								</tr>
+                                <tr>
+								  <td>EE</td>
+								  <td>3</td>
+								</tr>
+                                <tr>
+								  <td>AUTO</td>
+								  <td>2</td>
+								</tr>
+<!-- /////////////////////////////////////////////////////////////////////////////////////////// -->
+                                <tr>
+								  <td rowspan="11">TRAUMA AND SPECIALIST HOSPITAL (WINNEBA)</td>
+								  <td>ACCT</td>
+								  <td>5 </td>
+								</tr>
+                                <tr>
+								  <td>SEC</td>
+								  <td>1</td>
+								</tr>
+                                <tr>
+								  <td>PS</td>
+								  <td>2</td>
+								</tr>
+                                <tr>
+								  <td>STATS</td>
+								  <td>1</td>
+								</tr>
+                                <tr>
+								  <td>HCIM</td>
+								  <td>1</td>
+								</tr>
+                                <tr>
+								  <td>SLT</td>
+								  <td>2</td>
+								</tr>
+                                <tr>
+								  <td>CS</td>
+								  <td>2</td>
+								</tr>
+                                <tr>
+								  <td>BUILDING</td>
+								  <td>1</td>
+								</tr>
+                                <tr>
+								  <td>CIVIL</td>
+								  <td>2</td>
+								</tr>
+                                <tr>
+								  <td>EE</td>
+								  <td>2</td>
+								</tr>
+                                <tr>
+								  <td>MECH</td>
+								  <td>2</td>
+								</tr>
+<!-- /////////////////////////////////////////////////////////////////////////////////////////// -->
+
+
+
+
+							</tbody>
+						</table>
                 </div>
                 <!--// ABOUT LIAISON -->
 

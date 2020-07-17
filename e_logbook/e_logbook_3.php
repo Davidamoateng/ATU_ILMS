@@ -10,6 +10,98 @@
 		$_SESSION['msg'] = "Please log in first ...";
 		header('location: ../login.php');
 	}
+
+	/////////// E-Logbook Code Starts Here//////////////////////////////////////////////////////////////////////
+	$update_btn_status = "";
+	$save_btn_status = "";
+
+	$studentFirstName = $_SESSION['user']['first_name'];
+	$studentLastName = $_SESSION['user']['last_name'];
+
+	
+	$student_full_name = $studentFirstName." ".$studentLastName;
+	$indexNumber = $_SESSION['user']['user_id'];
+
+		 $check_content_existence = "SELECT * FROM week3_table WHERE index_number = '$indexNumber'";
+		 $check_existence_query = mysqli_query($db, $check_content_existence);
+		 $check_content_presence = mysqli_num_rows($check_existence_query);
+
+	if ($check_content_presence == 1) {
+
+		$edit_btn_status = "enabled";
+		$save_btn_status = "disabled";
+
+	}else{
+
+		$edit_btn_status = "disabled";
+		$save_btn_status = "enabled";
+
+	}
+
+	//////////////////////////SAVE BUTTON START/////////////////////////////////////////////
+	if (isset($_POST["save_btn"])) {
+	 
+		$monday_activity = $_POST["job_assigned_1"];
+		$tuesday_activity = $_POST["job_assigned_2"];
+		$wednesday_activity = $_POST["job_assigned_3"];
+		$thursday_activity = $_POST["job_assigned_4"];
+		$friday_activity = $_POST["job_assigned_5"];
+
+		if ($monday_activity != "" && $tuesday_activity != "" && $wednesday_activity != "" && $thursday_activity != "" && $friday_activity != "") {
+		   
+			 $check_record_existence = "SELECT * FROM week3_table WHERE index_number = '$indexNumber'";
+			 $record_existence_query = mysqli_query($db, $check_record_existence);
+			 $record_query_presence = mysqli_num_rows($record_existence_query);
+
+			 if ($record_query_presence == 1) {
+				 
+				 echo "<script>alert('Error... Record already exists..!')</script>";
+
+			 }else {
+				 
+				 $insert_details_command = "INSERT INTO week3_table (`id`, `username`, `index_number`, `date`, `monday_activities`, `tuesday_activities`, `wednesday_activities`, `thursday_activities`, `friday_activities`) 
+				 VALUES (NULL, '$student_full_name', '$indexNumber', CURRENT_TIMESTAMP, '$monday_activity', '$tuesday_activity', '$wednesday_activity', '$thursday_activity', '$friday_activity')";
+				 $execute_insert_query = mysqli_query($db, $insert_details_command);
+				 
+				 echo "<script>alert('Your record has been saved successfully')</script>";
+				 //header('location: e_logbook_2.php');
+				 
+			 }
+
+		}else{
+			echo "<script>alert('Please fill all input fields ...')</script>";
+		}
+	}
+	/////////////////////////////////SAVE BUTTON END/////////////////////////////////////////
+
+
+	//////////////////////////EDIT BUTTON START/////////////////////////////////////////////
+	if (isset($_POST["edit_btn"])) {
+
+		$monday_activity = $_POST["job_assigned_1"];
+		$tuesday_activity = $_POST["job_assigned_2"];
+		$wednesday_activity = $_POST["job_assigned_3"];
+		$thursday_activity = $_POST["job_assigned_4"];
+		$friday_activity = $_POST["job_assigned_5"];
+
+		if ($monday_activity != "" && $tuesday_activity != "" && $wednesday_activity != "" && $thursday_activity != "" && $friday_activity != "") {
+		 
+		  $update_details_command = "UPDATE week3_table SET monday_activities = '$monday_activity', tuesday_activities = '$tuesday_activity', wednesday_activities = '$wednesday_activity', thursday_activities = '$thursday_activity', friday_activities = '$friday_activity' WHERE `index_number`='$indexNumber'";
+		  $execute_update_query = mysqli_query($db, $update_details_command);
+
+		  
+
+		  echo "<script>alert('Your record has been updated successfully ...')</script>";
+		  //header('location: e_logbook_2.php');
+
+		}else{
+
+			echo "<script>alert('You need to fill all input fields ...')</script>";
+					}
+	}
+	/////////////////////////////////EDIT BUTTON END////////////////////////////////////////////////
+
+ /////////// E-Logbook Code Ends Here//////////////////////////////////////////////////////////////////////
 ?>
 
 <!DOCTYPE HTML>
@@ -296,36 +388,57 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
 																					</tr>
 																				</thead>
 																				<tbody>
-											    										<tr>
-																						<th scope="row" class="e-logbook-th" style="padding-top: 22px;">Monday</th>
-																						<td>
-																							<textarea name="job_assigned_1" class="form-control"></textarea>
-																						</td>                                
-																					</tr>
-																					<tr>
-																						<th scope="row" class="e-logbook-table" style="padding-top: 22px;">Teusday</th>
-																						<td>
-																							<textarea name="job_assigned_1" class="form-control"></textarea>
-																						</td>                                
-																					</tr>
-																					<tr>
-																						<th scope="row" class="e-logbook-table" style="padding-top: 22px;">Wednesday</th>
-																						<td>
-																							<textarea name="job_assigned_1" class="form-control"></textarea>
-																						</td>                                
-																					</tr>
-																					<tr>
-																						<th scope="row" class="e-logbook-table" style="padding-top: 22px;">Thursday</th>
-																						<td>
-																							<textarea name="job_assigned_1" class="form-control"></textarea>
-																						</td>                                
-																					</tr>
-																					<tr>
-																						<th scope="row" class="e-logbook-table" style="padding-top: 22px;">Friday</th>
-																						<td>
-																							<textarea name="job_assigned_1" class="form-control"></textarea>
-																						</td>                                
-																					</tr>
+																				<?php 
+																				
+																				$get_previous_data = "SELECT * FROM week3_table WHERE index_number = '$indexNumber'";
+																				$execute_get_query = mysqli_query($db, $get_previous_data);
+																				$get_data = mysqli_fetch_assoc($execute_get_query);
+																				
+
+																				$monday_activity_holder = $get_data["monday_activities"];
+																				$tuesday_activity_holder = $get_data["tuesday_activities"];
+																				$wednesday_activity_holder = $get_data["wednesday_activities"];
+																				$thursday_activity_holder = $get_data["thursday_activities"];
+																				$friday_activity_holder = $get_data["friday_activities"];
+
+
+
+																				 echo "<tr>";
+																				 echo "<th scope='row' class='e-logbook-th' style='padding-top: 22px;'>"."Monday"."</th>";
+																				 echo "<td>";
+																					  echo "<textarea name='job_assigned_1' class='form-control' required>".$monday_activity_holder."</textarea>";
+																				 echo "</td>";                             
+																				 echo "</tr>";
+
+																				 echo "<tr>";
+																				 echo "<th scope='row' class='e-logbook-table' style='padding-top: 22px;'>"."Tuesday"."</th>";
+																				 echo "<td>";
+																					  echo "<textarea name='job_assigned_2' class='form-control' required>".$tuesday_activity_holder."</textarea>";
+																				 echo "</td>";                                
+																				 echo "</tr>";
+
+																				 echo "<tr>";
+																				 echo "<th scope='row' class='e-logbook-table' style='padding-top: 22px;'>"."Wednesday"."</th>";
+																				 echo "<td>";
+																					  echo "<textarea name='job_assigned_3' class='form-control' required>".$wednesday_activity_holder."</textarea>";
+																				 echo "</td>";                                
+																				 echo "</tr>";
+
+																				 echo "<tr>";
+																				 echo "<th scope='row' class='e-logbook-table' style='padding-top: 22px;'>"."Thursday"."</th>";
+																				 echo "<td>";
+																					  echo "<textarea name='job_assigned_4' class='form-control' required>".$thursday_activity_holder."</textarea>";
+																				 echo "</td>";                                
+																				 echo "</tr>";
+
+																				 echo "<tr>";
+																				 echo "<th scope='row' class='e-logbook-table' style='padding-top: 22px;'>"."Friday"."</th>";
+																				 echo "<td>";
+																					 echo "<textarea name='job_assigned_5' class='form-control' required>".$friday_activity_holder."</textarea>";
+																				 echo "</td>";                                
+																				 echo "</tr>";
+
+																				 ?>
 																				</tbody>
 																			</table>
 																   </div>    
@@ -335,11 +448,11 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
 																<!-- //E-logbook Table -->
 
 																<div class="text-center">
-																	<button type="submit" class="btn btn-primary disabled">
+																	<button type="submit" name="edit_btn" class="btn btn-primary" <?php echo $edit_btn_status; ?>>
 																		<i class="fa fa-edit"></i>
 																		Edit
 																	</button>
-																	<button type="submit" class="btn btn-success">
+																	<button type="submit" name="save_btn" class="btn btn-success" <?php echo $save_btn_status; ?>>
 																		<i class="fa fa-save"></i>
 																		Save
 																	</button>

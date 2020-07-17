@@ -10,6 +10,9 @@
 	  $_SESSION['msg'] = "Please log in first ...";
 	  header('location: ../login.php');
   }
+
+  $admin = $_SESSION['user']['first_name'];
+
 ?>
 
 <!DOCTYPE HTML>
@@ -182,7 +185,7 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
 
 			  <hr class="sidebar-divider">
 
-			  <li>
+			  <!-- <li>
 				<a href="view_student_logbooks.php">
 					<i class="fa fa-book"></i> 
 					<span>View Student Logbook</span>
@@ -198,7 +201,16 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
 				</a>
 			</li>	
 			
-			<hr class="sidebar-divider">
+			<hr class="sidebar-divider"> -->
+
+			<li class="treeview">
+				<a href="add_admin.php">
+				 <i class="fa fa-plus"></i>
+				 <span>Add New Admin</span>
+				</a>
+			  </li>
+
+			  <hr class="sidebar-divider">
 
 			  <li>
 				<a href="change_password.php">
@@ -301,12 +313,46 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
 				<?php endif ?>
 			<!-- Notification Message -->
 
+			<?php 
+
+			    // Count All Students // 
+				$all_students_sql = "SELECT count(id) AS total FROM users WHERE user_type = 'user'";
+				$all_students_result = mysqli_query($db, $all_students_sql);
+				$all_students_values = mysqli_fetch_assoc($all_students_result);
+				$all_students_num_rows = $all_students_values['total'];
+				
+				// Count School Supervisors //
+				$school_supervisors_sql = "SELECT count(id) AS total FROM school_supervisors";
+				$school_supervisors_result = mysqli_query($db, $school_supervisors_sql);
+				$school_supervisors_values = mysqli_fetch_assoc($school_supervisors_result);
+				$school_supervisors_num_rows = $school_supervisors_values['total'];
+
+				// Count Virtual Attachment //
+				$virtual_attachment_sql = "SELECT count(id) AS total FROM virtual_attachment_registration";
+				$virtual_attachment_result = mysqli_query($db, $virtual_attachment_sql);
+				$virtual_attachment_values = mysqli_fetch_assoc($virtual_attachment_result);
+				$virtual_attachment_num_rows = $virtual_attachment_values['total'];
+
+				// Count Industrial Attachment //
+				$industrial_attachment_sql = "SELECT count(id) AS total FROM industrial_attachment_registration";
+				$industrial_attachment_result = mysqli_query($db, $industrial_attachment_sql);
+				$industrial_attachment_values = mysqli_fetch_assoc($industrial_attachment_result);
+				$industrial_attachment_num_rows = $industrial_attachment_values['total'];
+
+				// Count System Admins // 
+				$system_admins_sql = "SELECT count(id) AS total FROM users WHERE user_type = 'admin'";
+				$system_admins_result = mysqli_query($db, $system_admins_sql);
+				$system_admins_values = mysqli_fetch_assoc($system_admins_result);
+				$system_admins_num_rows = $system_admins_values['total'];
+			
+			?>
+
         	<div class="col-md-3 widget widget1">
         		<div class="r3_counter_box">
                     <i class="pull-left fa fa-users icon-rounded"></i>
                     <div class="stats">
-                      <h5><strong>84</strong></h5>
-                      <span>Registered <br> Students</span>
+                      <h5><strong> <?php echo $all_students_num_rows; ?> </strong></h5>
+                      <span>All <br> Student</span>
                     </div>
                 </div>
         	</div>
@@ -314,8 +360,8 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
         		<div class="r3_counter_box">
                     <i class="pull-left fa fa-user user1 icon-rounded"></i>
                     <div class="stats">
-                      <h5><strong>30</strong></h5>
-                      <span>Registered <br> Supervisors</span>
+                      <h5><strong><?php echo $school_supervisors_num_rows; ?></strong></h5>
+                      <span>School <br> Supervisors</span>
                     </div>
                 </div>
         	</div>
@@ -323,7 +369,7 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
         		<div class="r3_counter_box">
                     <i class="pull-left fa fa-building-o user2 icon-rounded"></i>
                     <div class="stats">
-                      <h5><strong>32</strong></h5>
+                      <h5><strong><?php echo $virtual_attachment_num_rows; ?></strong></h5>
                       <span>Virtual <br> Attachment</span>
                     </div>
                 </div>
@@ -332,7 +378,7 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
         		<div class="r3_counter_box">
                     <i class="pull-left fa fa-cogs dollar1 icon-rounded"></i>
                     <div class="stats">
-                      <h5><strong>52</strong></h5>
+                      <h5><strong><?php echo $industrial_attachment_num_rows; ?></strong></h5>
                       <span>Industrial <br> Attachment</span>
                     </div>
                 </div>
@@ -342,8 +388,8 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
         		<div class="r3_counter_box">
                     <i class="pull-left fa fa-male dollar2 icon-rounded"></i>
                     <div class="stats">
-                      <h5><strong>26</strong></h5>
-                      <span>Assigned <br> Supervisors</span>
+                      <h5><strong><?php echo $system_admins_num_rows; ?></strong></h5>
+                      <span>System <br> Admins</span>
                     </div>
                 </div>
 			 </div>
@@ -376,7 +422,7 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
 										</div>
 											<div class="monthly" id="mycalendar">
 												<div class="monthly-header">
-													<div class="monthly-header-title">May 2020</div>
+													<div class="monthly-header-title">July 2020</div>
 													<a href="#" class="monthly-prev"></a>
 													<a href="#" class="monthly-next"></a>
 												</div><div class="monthly-day-title-wrap">
@@ -395,7 +441,7 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
 
 															</div>
 														</div>
-														<a href="#" class="m-d monthly-day monthly-day-event monthly-today" data-number="1">
+														<a href="#" class="m-d monthly-day monthly-day-event " data-number="1">
 															<div class="monthly-day-number">1</div><div class="monthly-indicator-wrap">
 
 															</div>
@@ -428,7 +474,7 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
 															<div class="monthly-day-number">7</div>
 															<div class="monthly-indicator-wrap"></div>
 														</a>
-														<a href="#" class="m-d monthly-day monthly-day-event" data-number="8">
+														<a href="#" class="m-d monthly-day monthly-day-event monthly-today" data-number="8">
 															<div class="monthly-day-number">8</div>
 															<div class="monthly-indicator-wrap"></div>
 														</a>

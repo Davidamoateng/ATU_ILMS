@@ -38,8 +38,8 @@ if(!isLoggedIn()){
 ===========================================================================================================
                                 Regions
 -----------------------------------------------------------------------
-                               Ashanti Region
-                               Ahafo Region
+                   Ashanti Region
+                   Ahafo Region
 			       Bono East Region
 			       Brong Ahafo Region
 			       Central Region
@@ -50,10 +50,10 @@ if(!isLoggedIn()){
 			       Oti Region
 			       Savannah Region
 			       Upper East Region
-																Upper West Region
-																Volta Region 
-																Western North Region
-																Western Region
+				   Upper West Region
+				   Volta Region 
+				   Western North Region
+				   Western Region
 =============================================================================================================================
 	                                             FACULTIES
 										-----------------------------
@@ -230,3 +230,45 @@ if(!isLoggedIn()){
 															<option>400</option>
 														</select>
 													</div> 
+=====================================================================================================================================================================
+
+  style="text-align:center" for th
+
+  style='text-align:center' for td
+
+	Lorem ipsum, dolor sit amet consectetur adipisicing elit. Assumenda minima nulla debitis odio alias sed ipsam fuga fugiat repellendus voluptates illum consectetur ea fugit facilis officiis, delectus sunt sequi excepturi?
+
+
+
+
+  $mysql_query_faculty_of_applied_arts 
+  $mysql_query_faculty_of_applied_science 
+  $mysql_query_faculty_of_built_environment 
+  $mysql_query_faculty_of_business 
+  $mysql_query_faculty_of_engineering
+
+
+       // Ashanti Region //
+  selected_supervisor_1_ashanti_applied_arts
+  selected_supervisor_2_ashanti_applied_arts
+
+  selected_supervisor_1_ashanti_applied_science
+  selected_supervisor_2_ashanti_applied_science
+
+  selected_supervisor_1_ashanti_built_environment
+  selected_supervisor_2_ashanti_built_environment
+
+  selected_supervisor_1_ashanti_faculty_of_business
+  selected_supervisor_2_ashanti_faculty_of_business
+
+  selected_supervisor_1_ashanti_faculty_of_engineering
+  selected_supervisor_2_ashanti_faculty_of_engineering
+
+
+                
+				
+				
+				
+			     
+
+     

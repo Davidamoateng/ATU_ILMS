@@ -344,13 +344,13 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
 												<div class="row">
 
 													<div class="form-group col-md-6"> 
-														<label for="InputFirstName">First Name:</label> 
-														<input type="text" class="form-control" name="inputFirstName" id="FirstName" placeholder="Enter First Name" required> 
+														<label for="InputFirstName">First Name<b style="color:red;">*</b>:</label> 
+														<input type="text" class="form-control" name="inputFirstName" id="FirstName" onkeypress="return alphabet(event)" placeholder="Enter First Name" required> 
 													</div>
 
 													<div class="form-group col-md-6"> 
-														<label for="InputLastName">Last Name:</label> 
-														<input type="text" class="form-control" name="inputLastName" id="LastName" placeholder="Enter Last Name" required> 
+														<label for="InputLastName">Last Name<b style="color:red;">*</b>:</label> 
+														<input type="text" class="form-control" name="inputLastName" id="LastName" onkeypress="return alphabet(event)" placeholder="Enter Last Name" required> 
 													</div>
 													
 												</div>
@@ -358,12 +358,12 @@ SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony
 												<div class="row">
 
 													<div class="form-group col-md-6"> 
-														<label for="InputUserId">User Id:</label> 
-														<input type="text" class="form-control" name="inputUserId" id="UserId" placeholder="Enter User Id" required> 
+														<label for="InputUserId">User Id<b style="color:red;">*</b>:</label> 
+														<input type="text" class="form-control" name="inputUserId" id="UserId" pattern="[0-9D]{9}" title="(User ID must Contain 8 digits and a Capital 'D')" onkeypress="return num_d(event)" placeholder="Enter User Id" required> 
 													</div>
 
 													<div class="form-group col-md-6"> 
-														<label for="InputPassword">Password:</label> 
+														<label for="InputPassword">Password<b style="color:red;">*</b>:</label> 
 														<input type="password" class="form-control" name="inputPassword" id="Password" placeholder="Enter Password" required> 
 													</div>
 
